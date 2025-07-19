@@ -1,3 +1,4 @@
+import { EMPTY_VALUE } from './constants';
 import type { Board, Coord } from './types';
 
 export const copyBoard = (board: Board): Board => {
@@ -56,10 +57,6 @@ export const floodFill = (board: Board, coord: Coord, newValue: number) => {
     }
 
     if (getValue(board, current) !== targetValue) {
-      console.log('does not equal target', {
-        targetValue,
-        currentVal: getValue(board, current),
-      });
       continue;
     }
 
@@ -69,4 +66,34 @@ export const floodFill = (board: Board, coord: Coord, newValue: number) => {
   }
 
   return { board, visited: filled };
+};
+
+export const applyGravity = (board: Board): Board => {
+  return board.map(col => {
+    return [...col].sort((a, b) => {
+      if (a === EMPTY_VALUE && b !== EMPTY_VALUE) return -1;
+      if (a !== EMPTY_VALUE && b === EMPTY_VALUE) return 1;
+
+      return 0;
+    });
+  });
+};
+
+export const shiftLeft = (board: Board): Board => {
+  const size = board.length;
+  let emptyCount = 0;
+  for (let i = size - 1; i >= 0; i--) {
+    const col = board[i];
+    const isEmpty = col.every(val => val === EMPTY_VALUE);
+    if (isEmpty) {
+      board.splice(i, 1);
+      emptyCount++;
+    }
+  }
+
+  for (let i = 0; i < emptyCount; i++) {
+    board.push(new Array(size).fill(EMPTY_VALUE));
+  }
+
+  return board;
 };

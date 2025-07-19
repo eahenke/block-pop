@@ -3,11 +3,16 @@
 }
 
 .board {
-  display: grid;
+  display: flex;
 }
 
 .board-row {
   display: flex;
+}
+
+.board-col {
+  display: flex;
+  flex-direction: column;
 }
 
 .tile {

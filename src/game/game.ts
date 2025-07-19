@@ -2,7 +2,14 @@ import type { Board } from './types';
 import { getRng } from './rng';
 import { ACTIONS, type Action } from './actions';
 import { COLORS, BOARD_SIZE, EMPTY_VALUE } from './constants';
-import { copyBoard, floodFill, getValidNeighbors } from './matrix';
+import {
+  applyGravity,
+  copyBoard,
+  floodFill,
+  getValidNeighbors,
+  getValue,
+  shiftLeft,
+} from './matrix';
 
 /**
  * Game functions needed
@@ -53,6 +60,11 @@ export const gameReducer = (game: GameType, action: Action): GameType => {
     }
     case ACTIONS.REMOVE: {
       const { row, col } = action.payload;
+      const value = getValue(game.board, [row, col]);
+      if (value === EMPTY_VALUE) {
+        return game;
+      }
+
       const validNeighbors = getValidNeighbors(game.board, [row, col]);
       if (!validNeighbors.length) {
         return game;
@@ -68,6 +80,15 @@ export const gameReducer = (game: GameType, action: Action): GameType => {
         ...game,
         board,
         // TODO: Scoring
+      };
+    }
+    case ACTIONS.UPDATE: {
+      const gravityBoard = applyGravity(copyBoard(game.board));
+      const shiftedBoard = shiftLeft(gravityBoard);
+
+      return {
+        ...game,
+        board: shiftedBoard,
       };
     }
     default: {
