@@ -15,8 +15,8 @@ type InitAction = {
 type RemoveAction = {
   type: typeof ACTIONS.REMOVE;
   payload: {
-    x: number;
-    y: number;
+    row: number;
+    col: number;
   };
 };
 

@@ -7,7 +7,7 @@ const seed = '1234567890';
 type GameContext = {
   game: GameType;
   restart: () => void;
-  remove: (x: number, y: number) => void;
+  remove: (row: number, col: number) => void;
   update: () => void;
 };
 
@@ -22,12 +22,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const remove = (x: number, y: number) => {
+  const remove = (row: number, col: number) => {
     dispatch({
       type: ACTIONS.REMOVE,
       payload: {
-        x,
-        y,
+        row,
+        col,
       },
     });
   };
