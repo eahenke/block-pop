@@ -1,0 +1,52 @@
+.board-wrapper {
+  overflow-x: auto;
+}
+
+.board {
+  display: grid;
+}
+
+.board-row {
+  display: flex;
+}
+
+.tile {
+  flex: 1;
+  height: 25px;
+  min-width: 25px;
+  border: 1px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.tile-0 {
+  background-color: transparent;
+  border: none;
+}
+
+.tile-1 {
+  background-color: red;
+}
+
+.tile-2 {
+  background-color: cyan;
+}
+
+.tile-3 {
+  background-color: lime;
+}
+
+.tile-4 {
+  background-color: purple;
+}
+
+.tile-5 {
+  background-color: yellow;
+}
+
+.tile.empty {
+  visibility: hidden;
+}
