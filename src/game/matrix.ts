@@ -65,7 +65,7 @@ export const floodFill = (board: Board, coord: Coord, newValue: number) => {
     filled.add(current);
   }
 
-  return { board, visited: filled };
+  return { board, filled };
 };
 
 export const applyGravity = (board: Board): Board => {

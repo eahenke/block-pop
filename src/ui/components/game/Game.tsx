@@ -1,5 +1,11 @@
 import { Board } from '../board';
+import { Score } from '../score';
 
 export const Game = () => {
-  return <Board />;
+  return (
+    <div>
+      <Score />
+      <Board />
+    </div>
+  );
 };

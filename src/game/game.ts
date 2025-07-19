@@ -10,6 +10,7 @@ import {
   getValue,
   shiftLeft,
 } from './matrix';
+import { score } from './score';
 
 /**
  * Game functions needed
@@ -43,6 +44,7 @@ export const initGame = (seed: string): GameType => {
     board: generateBoard(seed),
     seed: seed,
     level: 1,
+    lastMove: null,
   };
 };
 
@@ -51,6 +53,10 @@ export type GameType = {
   board: Board;
   seed: string;
   level: number;
+  lastMove: {
+    blocks: number;
+    score: number;
+  } | null;
 };
 
 export const gameReducer = (game: GameType, action: Action): GameType => {
@@ -70,16 +76,22 @@ export const gameReducer = (game: GameType, action: Action): GameType => {
         return game;
       }
 
-      const { board } = floodFill(
+      const { board, filled } = floodFill(
         copyBoard(game.board),
         [row, col],
         EMPTY_VALUE
       );
 
+      const points = score(filled.size);
+
       return {
         ...game,
         board,
-        // TODO: Scoring
+        score: game.score + points,
+        lastMove: {
+          blocks: filled.size,
+          score: points,
+        },
       };
     }
     case ACTIONS.UPDATE: {

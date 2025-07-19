@@ -1,0 +1,46 @@
+import { useEffect, useRef, useState } from 'react';
+import { useGame } from '../../context/game-context';
+
+const SCORE_NOTICE_DURATION = 1000;
+
+export const Score = () => {
+  const {
+    game: { score, lastMove },
+  } = useGame();
+  const [showMove, setShowMoved] = useState(false);
+  const timerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!lastMove?.blocks || !lastMove?.score) {
+      return;
+    }
+
+    setShowMoved(true);
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      setShowMoved(false);
+    }, SCORE_NOTICE_DURATION);
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [lastMove, score]);
+
+  return (
+    <div>
+      <p>Score: {score}</p>
+      <div>
+        {showMove && lastMove ? (
+          <span>
+            {lastMove.blocks} blocks! {lastMove.score} points!
+          </span>
+        ) : null}
+      </div>
+    </div>
+  );
+};
