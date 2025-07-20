@@ -4,11 +4,9 @@ import { GameProvider } from './ui/context/game-context';
 
 function App() {
   return (
-    <div>
-      <GameProvider>
-        <Game />
-      </GameProvider>
-    </div>
+    <GameProvider>
+      <Game />
+    </GameProvider>
   );
 }
 

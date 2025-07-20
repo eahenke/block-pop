@@ -3,23 +3,18 @@
 }
 
 .board {
-  display: flex;
-}
-
-.board-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
+  gap: 1px;
 }
 
 .board-col {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  gap: 1px;
 }
 
 .tile {
-  flex: 1;
-  height: 25px;
-  min-width: 25px;
-  border: 1px solid white;
+  aspect-ratio: 1 / 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,6 +25,7 @@
 .tile-0 {
   background-color: transparent;
   border: none;
+  cursor: default;
 }
 
 .tile-1 {
@@ -54,4 +50,5 @@
 
 .tile.empty {
   visibility: hidden;
+  cursor: none;
 }

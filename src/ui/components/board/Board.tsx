@@ -23,9 +23,7 @@ export const Board = () => {
                 onClick={() => onClick(cIdx, rIdx)}
                 className={`tile tile-${val}`}
                 key={`${cIdx},${rIdx}`}
-              >
-                {val}
-              </div>
+              ></div>
             ))}
           </div>
         ))}
