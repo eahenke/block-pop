@@ -1,17 +1,9 @@
-import React, { useContext, useReducer, type ReactNode } from 'react';
-import { gameReducer, initGame, type GameType } from '../../game/game';
+import { useReducer, type ReactNode } from 'react';
+import { gameReducer, initGame } from '../../game/game';
 import { ACTIONS } from '../../game/actions';
+import { GameContext } from './game-context';
 
 const seed = '1234567890';
-
-type GameContext = {
-  game: GameType;
-  restart: () => void;
-  remove: (row: number, col: number) => void;
-  update: () => void;
-};
-
-const GameContext = React.createContext<GameContext | null>(null);
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [game, dispatch] = useReducer(gameReducer, initGame(seed));
@@ -22,7 +14,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const remove = (row: number, col: number) => {
+  const remove = (col: number, row: number) => {
     dispatch({
       type: ACTIONS.REMOVE,
       payload: {
@@ -46,14 +38,4 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
-};
-
-// TODO: move to hook, maybe have actions in there?
-export const useGame = () => {
-  const context = useContext(GameContext);
-  if (!context) {
-    throw new Error('useGame must be used inside of a <GameProvider />');
-  }
-
-  return context;
 };

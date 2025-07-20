@@ -1,16 +1,13 @@
+import { useGame } from '../../hooks/use-game';
 import './board.css';
-import { useGame } from '../../context/game-context';
 
 export const Board = () => {
-  const { game, remove, update } = useGame();
+  const { game, removeBlock } = useGame();
 
   const board = game.board;
 
-  const onClick = (row: number, col: number) => {
-    remove(row, col);
-    setTimeout(() => {
-      update();
-    }, 100);
+  const onClick = (col: number, row: number) => {
+    removeBlock(col, row);
   };
 
   return (

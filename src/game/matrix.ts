@@ -2,16 +2,16 @@ import { EMPTY_VALUE } from './constants';
 import type { Board, Coord } from './types';
 
 export const copyBoard = (board: Board): Board => {
-  return board.map(row => [...row]);
+  return board.map(col => [...col]);
 };
 
 export const getNeighbors = (coord: Coord): Coord[] => {
-  const [row, col] = coord;
+  const [col, row] = coord;
 
-  const up = [row - 1, col];
-  const right = [row, col + 1];
-  const down = [row + 1, col];
-  const left = [row, col - 1];
+  const up = [col, row - 1];
+  const right = [col + 1, row];
+  const down = [col, row + 1];
+  const left = [col - 1, row];
 
   return [up, right, down, left];
 };
@@ -21,9 +21,9 @@ export const getValidNeighbors = (board: Board, coord: Coord): Coord[] => {
   const boardHeight = board.length;
   const value = getValue(board, coord);
   const neighbors = getNeighbors(coord).filter(neighborCoord => {
-    const [row, col] = neighborCoord;
+    const [col, row] = neighborCoord;
     const onBoard =
-      row >= 0 && row < boardWidth && col >= 0 && col < boardHeight;
+      col >= 0 && col < boardWidth && row >= 0 && row < boardHeight;
 
     const matching = onBoard && getValue(board, neighborCoord) === value;
 
@@ -33,9 +33,9 @@ export const getValidNeighbors = (board: Board, coord: Coord): Coord[] => {
   return neighbors;
 };
 
-export const getValue = (board: Board, coord: Coord): number => {
-  const [row, col] = coord;
-  return board[row][col];
+const getValue = (board: Board, coord: Coord): number => {
+  const [col, row] = coord;
+  return board[col][row];
 };
 
 const setValue = (board: Board, coord: Coord, value: number): void => {

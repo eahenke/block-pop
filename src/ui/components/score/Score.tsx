@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useGame } from '../../context/game-context';
+import { useGame } from '../../hooks/use-game';
 
 const SCORE_NOTICE_DURATION = 1000;
 
@@ -34,7 +34,7 @@ export const Score = () => {
   return (
     <div>
       <p>Score: {score}</p>
-      <div>
+      <div style={{ height: '1.5rem' }}>
         {showMove && lastMove ? (
           <span>
             {lastMove.blocks} blocks! {lastMove.score} points!

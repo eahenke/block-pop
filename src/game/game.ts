@@ -1,4 +1,4 @@
-import type { Board } from './types';
+import type { Board, Coord } from './types';
 import { getRng } from './rng';
 import { ACTIONS, type Action } from './actions';
 import { COLORS, BOARD_SIZE, EMPTY_VALUE } from './constants';
@@ -7,20 +7,9 @@ import {
   copyBoard,
   floodFill,
   getValidNeighbors,
-  getValue,
   shiftLeft,
 } from './matrix';
 import { score } from './score';
-
-/**
- * Game functions needed
- *
- * generate board
- * remove piece (with animation?)
- * shift pieces down (after timeout?)
- * shift pieces over if column empty
- *
- */
 
 const generateTileValue = (seed: string) => {
   return Math.floor(getRng(seed).random() * COLORS + 1);
@@ -48,6 +37,22 @@ export const initGame = (seed: string): GameType => {
   };
 };
 
+export const isValidMove = (board: Board, coord: Coord) => {
+  const block = board[coord[0]][coord[1]];
+
+  return block !== EMPTY_VALUE && getValidNeighbors(board, coord).length > 0;
+};
+
+const isOutOfMoves = (board: Board): boolean => {
+  return board.every((col, cIdx) => {
+    return col.every((block, rIdx) => {
+      return (
+        block === EMPTY_VALUE || !getValidNeighbors(board, [cIdx, rIdx]).length
+      );
+    });
+  });
+};
+
 export type GameType = {
   score: number;
   board: Board;
@@ -65,20 +70,16 @@ export const gameReducer = (game: GameType, action: Action): GameType => {
       return initGame(action.payload.seed);
     }
     case ACTIONS.REMOVE: {
-      const { row, col } = action.payload;
-      const value = getValue(game.board, [row, col]);
-      if (value === EMPTY_VALUE) {
-        return game;
-      }
+      const { col, row } = action.payload;
+      const coord = [col, row];
 
-      const validNeighbors = getValidNeighbors(game.board, [row, col]);
-      if (!validNeighbors.length) {
+      if (!isValidMove(game.board, coord)) {
         return game;
       }
 
       const { board, filled } = floodFill(
         copyBoard(game.board),
-        [row, col],
+        coord,
         EMPTY_VALUE
       );
 
@@ -97,6 +98,10 @@ export const gameReducer = (game: GameType, action: Action): GameType => {
     case ACTIONS.UPDATE: {
       const gravityBoard = applyGravity(copyBoard(game.board));
       const shiftedBoard = shiftLeft(gravityBoard);
+
+      if (isOutOfMoves(shiftedBoard)) {
+        // TODO: Handle game over or level up
+      }
 
       return {
         ...game,
