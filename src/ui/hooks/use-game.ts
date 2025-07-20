@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { GameContext } from '../context/game-context';
-import { isValidMove, type GameType } from '../../game/game';
+import { isValidMove } from '../../game/game';
+import type { GameType } from '../../game/types';
 
 type GameUiInterface = {
   game: GameType;

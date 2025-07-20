@@ -1,4 +1,4 @@
-import type { Board, Coord } from './types';
+import type { Board, Coord, GameType } from './types';
 import { getRng } from './rng';
 import { ACTIONS, type Action } from './actions';
 import { COLORS, BOARD_SIZE, EMPTY_VALUE } from './constants';
@@ -9,7 +9,7 @@ import {
   getValidNeighbors,
   shiftLeft,
 } from './matrix';
-import { score } from './score';
+import { getLevelGoal, score } from './score';
 
 const generateTileValue = (seed: string) => {
   return Math.floor(getRng(seed).random() * COLORS + 1);
@@ -32,7 +32,12 @@ export const initGame = (seed: string): GameType => {
     score: 0,
     board: generateBoard(seed),
     seed: seed,
-    level: 1,
+    level: {
+      level: 1,
+      score: 0,
+      blocks: 0,
+      goal: getLevelGoal(1),
+    },
     lastMove: null,
   };
 };
@@ -51,17 +56,6 @@ const isOutOfMoves = (board: Board): boolean => {
       );
     });
   });
-};
-
-export type GameType = {
-  score: number;
-  board: Board;
-  seed: string;
-  level: number;
-  lastMove: {
-    blocks: number;
-    score: number;
-  } | null;
 };
 
 export const gameReducer = (game: GameType, action: Action): GameType => {

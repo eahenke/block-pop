@@ -3,6 +3,7 @@
   max-width: 500px;
   margin: 0 auto;
   display: grid;
+  row-gap: 1rem;
   grid-template-areas:
     'level'
     'score'

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { GameType } from '../../game/game';
+import type { GameType } from '../../game/types';
 
 export type GameContext = {
   game: GameType;
