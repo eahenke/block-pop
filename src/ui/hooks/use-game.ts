@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { GameContext } from '../context/game-context';
-import { isValidMove } from '../../game/game';
+import { isGameActive, isValidMove } from '../../game/game';
 import type { GameType } from '../../game/types';
 
 type GameUiInterface = {
@@ -17,7 +17,7 @@ export const useGame = (): GameUiInterface => {
   const { game, remove, update } = context;
 
   const removeBlock = (col: number, row: number) => {
-    if (!isValidMove(game.board, [col, row])) {
+    if (!isGameActive(game) || !isValidMove(game.board, [col, row])) {
       return;
     }
 

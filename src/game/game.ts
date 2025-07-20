@@ -1,4 +1,4 @@
-import type { Board, Coord, GameType } from './types';
+import type { Board, Coord, GameType, LastMove, Level } from './types';
 import { getRng } from './rng';
 import { ACTIONS, type Action } from './actions';
 import { COLORS, BOARD_SIZE, EMPTY_VALUE } from './constants';
@@ -29,6 +29,7 @@ const generateBoard = (seed: string) => {
 
 export const initGame = (seed: string): GameType => {
   return {
+    status: 'ACTIVE',
     score: 0,
     board: generateBoard(seed),
     seed: seed,
@@ -48,6 +49,10 @@ export const isValidMove = (board: Board, coord: Coord) => {
   return block !== EMPTY_VALUE && getValidNeighbors(board, coord).length > 0;
 };
 
+export const isGameActive = (game: GameType) => {
+  return game.status === 'ACTIVE';
+};
+
 const isOutOfMoves = (board: Board): boolean => {
   return board.every((col, cIdx) => {
     return col.every((block, rIdx) => {
@@ -56,6 +61,41 @@ const isOutOfMoves = (board: Board): boolean => {
       );
     });
   });
+};
+
+const updateLevel = (game: GameType, lastMove: LastMove): Level => {
+  return {
+    ...game.level,
+    score: game.level.score + lastMove.score,
+    blocks: game.level.blocks + lastMove.blocks,
+  };
+};
+
+const newLevel = (level: number): Level => {
+  return {
+    level: level,
+    score: 0,
+    blocks: 0,
+    goal: getLevelGoal(level),
+  };
+};
+
+const handleEndOfLevel = (game: GameType): GameType => {
+  if (game.score >= game.level.goal) {
+    // Level up
+    return {
+      ...game,
+      board: generateBoard(game.seed),
+      level: newLevel(game.level.level + 1),
+      lastMove: null,
+    };
+  } else {
+    // Game over
+    return {
+      ...game,
+      status: 'DONE',
+    };
+  }
 };
 
 export const gameReducer = (game: GameType, action: Action): GameType => {
@@ -78,29 +118,33 @@ export const gameReducer = (game: GameType, action: Action): GameType => {
       );
 
       const points = score(filled.size);
+      const lastMove = {
+        blocks: filled.size,
+        score: points,
+      };
 
       return {
         ...game,
         board,
         score: game.score + points,
-        lastMove: {
-          blocks: filled.size,
-          score: points,
-        },
+        level: updateLevel(game, lastMove),
+        lastMove,
       };
     }
     case ACTIONS.UPDATE: {
       const gravityBoard = applyGravity(copyBoard(game.board));
       const shiftedBoard = shiftLeft(gravityBoard);
 
-      if (isOutOfMoves(shiftedBoard)) {
-        // TODO: Handle game over or level up
-      }
-
-      return {
+      const updatedGame = {
         ...game,
         board: shiftedBoard,
       };
+
+      if (isOutOfMoves(updatedGame.board)) {
+        return handleEndOfLevel(updatedGame);
+      }
+
+      return updatedGame;
     }
     default: {
       return game;

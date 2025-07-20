@@ -9,13 +9,16 @@ export type Level = {
   goal: number;
 };
 
+export type LastMove = {
+  blocks: number;
+  score: number;
+};
+
 export type GameType = {
+  status: 'ACTIVE' | 'DONE';
   score: number;
   board: Board;
   seed: string;
   level: Level;
-  lastMove: {
-    blocks: number;
-    score: number;
-  } | null;
+  lastMove: LastMove | null;
 };
