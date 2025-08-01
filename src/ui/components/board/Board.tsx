@@ -1,3 +1,4 @@
+import { Box, Text } from '@mantine/core';
 import { useGame } from '../../hooks/use-game';
 import './board.css';
 
@@ -25,6 +26,9 @@ export const Board = () => {
           </div>
         ))}
       </div>
+      <Box mt="lg">
+        <Text ta="center">Current seed: {game.seed}</Text>
+      </Box>
     </div>
   );
 };

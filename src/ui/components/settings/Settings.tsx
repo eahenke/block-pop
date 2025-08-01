@@ -1,18 +1,18 @@
 import { useMemo, useState } from 'react';
-import { Button, Text, TextInput } from '@mantine/core';
-import { MdFileUpload, MdSave } from 'react-icons/md';
+import { Box, Button, Text, TextInput } from '@mantine/core';
+import { MdFileUpload, MdRefresh, MdSave } from 'react-icons/md';
 
 import { useGame } from '../../hooks/use-game';
 import { useSavedSeeds } from '../../hooks/use-saved-seeds';
-import './settings.css';
 import { Menu, Modal } from '../common';
+import { generateSeed } from '../../../game/seed';
 
 type SettingsProps = {
   open: boolean;
   onClose: () => void;
 };
 
-type SettingsSections = 'settings' | 'save' | 'load';
+type SettingsSections = 'settings' | 'save' | 'load' | 'new';
 
 const SaveSeed = ({ seed, onDone }: { seed: string; onDone: () => void }) => {
   const { saveSeed } = useSavedSeeds();
@@ -30,18 +30,20 @@ const SaveSeed = ({ seed, onDone }: { seed: string; onDone: () => void }) => {
   };
 
   return (
-    <div>
-      <TextInput
-        value={seedName}
-        onChange={e => setSeedName(e.currentTarget.value)}
-        label="Name"
-        className="seed-name-input"
-      />
-      {error ? <span>{error}</span> : null}
+    <Box mt="sm">
+      <Box mb="sm">
+        <TextInput
+          value={seedName}
+          onChange={e => setSeedName(e.currentTarget.value)}
+          label="Name"
+        />
+
+        {error ? <span>{error}</span> : null}
+      </Box>
       <Button fullWidth={true} onClick={() => handleSave()}>
         Save
       </Button>
-    </div>
+    </Box>
   );
 };
 
@@ -71,10 +73,34 @@ const LoadSeed = ({ onDone }: { onDone: () => void }) => {
   }));
 
   return (
-    <div>
+    <Box mt="md">
       <Menu items={items} />
       {error ? <span>{error}</span> : null}
-    </div>
+    </Box>
+  );
+};
+
+const NewSeed = ({ onDone }: { onDone: () => void }) => {
+  const { init } = useGame();
+
+  const seed = generateSeed();
+
+  const handleNewSeed = () => {
+    init(seed, true);
+    onDone();
+  };
+
+  return (
+    <>
+      <Box mb="sm" mt="sm">
+        <Text>
+          This will start a new game with seed <Text fw={700}>{seed}</Text>
+        </Text>
+      </Box>
+      <Button fullWidth={true} onClick={handleNewSeed}>
+        Okay
+      </Button>
+    </>
   );
 };
 
@@ -104,25 +130,33 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
         </Text>
       </div>
       {section === 'settings' ? (
-        <Menu
-          items={[
-            {
-              title: 'Save Seed',
-              icon: <MdSave size={24} />,
-              onClick: () => setSection('save'),
-            },
-            {
-              title: 'Load Seed',
-              icon: <MdFileUpload size={24} />,
-              onClick: () => setSection('load'),
-            },
-          ]}
-        />
+        <Box mt="md">
+          <Menu
+            items={[
+              {
+                title: 'Save Seed',
+                icon: <MdSave size={24} />,
+                onClick: () => setSection('save'),
+              },
+              {
+                title: 'Load Seed',
+                icon: <MdFileUpload size={24} />,
+                onClick: () => setSection('load'),
+              },
+              {
+                title: 'New Seed',
+                icon: <MdRefresh size={24} />,
+                onClick: () => setSection('new'),
+              },
+            ]}
+          />
+        </Box>
       ) : null}
-      {section === 'load' ? <LoadSeed onDone={onClose} /> : null}
+      {section === 'load' ? <LoadSeed onDone={handleClose} /> : null}
       {section === 'save' ? (
         <SaveSeed seed={game.seed} onDone={toMainSettings} />
       ) : null}
+      {section === 'new' ? <NewSeed onDone={handleClose} /> : null}
     </Modal>
   );
 };
