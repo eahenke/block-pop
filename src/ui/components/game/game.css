@@ -12,6 +12,8 @@
 
 .level-area {
   grid-area: 'level';
+  display: flex;
+  justify-content: space-between;
 }
 
 .score-area {
