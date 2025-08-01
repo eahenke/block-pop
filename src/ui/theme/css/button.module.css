@@ -1,0 +1,9 @@
+.root {
+  &[data-variant='text'] {
+    padding: 0;
+    text-align: left;
+    display: flex;
+    color: var(--mantine-color-text);
+    background: transparent;
+  }
+}

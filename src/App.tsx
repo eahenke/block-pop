@@ -1,12 +1,16 @@
+import { MantineProvider } from '@mantine/core';
 import './App.css';
 import { Game } from './ui/components/game/Game';
 import { GameProvider } from './ui/context/game-provider';
+import { theme } from './ui/theme';
 
 function App() {
   return (
-    <GameProvider>
-      <Game />
-    </GameProvider>
+    <MantineProvider theme={theme}>
+      <GameProvider>
+        <Game />
+      </GameProvider>
+    </MantineProvider>
   );
 }
 
