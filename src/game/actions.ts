@@ -9,6 +9,7 @@ type InitAction = {
   type: typeof ACTIONS.INIT;
   payload: {
     seed: string;
+    reset?: boolean;
   };
 };
 

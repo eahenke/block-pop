@@ -1,5 +1,5 @@
 import type { Board, Coord, GameType, LastMove, Level } from './types';
-import { getRng } from './rng';
+import { getRng, type Rng } from './rng';
 import { ACTIONS, type Action } from './actions';
 import { COLORS, BOARD_SIZE, EMPTY_VALUE } from './constants';
 import {
@@ -11,27 +11,29 @@ import {
 } from './matrix';
 import { getLevelGoal, score } from './score';
 
-const generateTileValue = (seed: string) => {
-  return Math.floor(getRng(seed).random() * COLORS + 1);
+const generateTileValue = (rng: Rng) => {
+  return Math.floor(rng.random() * COLORS + 1);
 };
 
-const generateBoard = (seed: string) => {
+const generateBoard = (rng: Rng) => {
   const board: Board = [];
   for (let i = 0; i < BOARD_SIZE; i++) {
     board[i] = [];
     for (let j = 0; j < BOARD_SIZE; j++) {
-      board[i][j] = generateTileValue(seed);
+      board[i][j] = generateTileValue(rng);
     }
   }
 
   return board;
 };
 
-export const initGame = (seed: string): GameType => {
+export const initGame = (seed: string, reset = false): GameType => {
+  const rng = getRng(seed, reset);
+
   return {
     status: 'ACTIVE',
     score: 0,
-    board: generateBoard(seed),
+    board: generateBoard(rng),
     seed: seed,
     level: {
       level: 1,
@@ -40,6 +42,7 @@ export const initGame = (seed: string): GameType => {
       goal: getLevelGoal(1),
     },
     lastMove: null,
+    rng,
   };
 };
 
@@ -85,7 +88,7 @@ const handleEndOfLevel = (game: GameType): GameType => {
     // Level up
     return {
       ...game,
-      board: generateBoard(game.seed),
+      board: generateBoard(game.rng),
       level: newLevel(game.level.level + 1),
       lastMove: null,
     };
@@ -101,7 +104,7 @@ const handleEndOfLevel = (game: GameType): GameType => {
 export const gameReducer = (game: GameType, action: Action): GameType => {
   switch (action.type) {
     case ACTIONS.INIT: {
-      return initGame(action.payload.seed);
+      return initGame(action.payload.seed, action.payload.reset);
     }
     case ACTIONS.REMOVE: {
       const { col, row } = action.payload;

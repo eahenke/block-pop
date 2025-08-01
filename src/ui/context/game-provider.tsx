@@ -5,8 +5,10 @@ import { GameContext } from './game-context';
 
 const seed = '1234567890';
 
+const initialState = initGame(seed);
+
 export const GameProvider = ({ children }: { children: ReactNode }) => {
-  const [game, dispatch] = useReducer(gameReducer, initGame(seed));
+  const [game, dispatch] = useReducer(gameReducer, initialState);
 
   const restart = () => {
     dispatch({
@@ -30,11 +32,22 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const init = (seed: string, reset = false) => {
+    dispatch({
+      type: ACTIONS.INIT,
+      payload: {
+        seed,
+        reset,
+      },
+    });
+  };
+
   const value = {
     game,
     restart,
     remove,
     update,
+    init,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

@@ -6,6 +6,7 @@ export type GameContext = {
   restart: () => void;
   remove: (col: number, row: number) => void;
   update: () => void;
+  init: (seed: string, reset?: boolean) => void;
 };
 
 export const GameContext = React.createContext<GameContext | null>(null);

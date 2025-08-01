@@ -1,14 +1,14 @@
 import Rand from 'rand-seed';
 
-type Rng = {
+export type Rng = {
   random: () => number;
   seed: string;
 };
 
 let rng: Rng | null = null;
 
-export const getRng = (seed: string): Rng => {
-  if (rng && seed === rng.seed) {
+export const getRng = (seed: string, reset = false): Rng => {
+  if (rng && seed === rng.seed && !reset) {
     return rng;
   }
 

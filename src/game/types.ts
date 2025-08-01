@@ -1,3 +1,5 @@
+import type { Rng } from './rng';
+
 export type Board = number[][];
 
 export type Coord = number[];
@@ -21,4 +23,5 @@ export type GameType = {
   seed: string;
   level: Level;
   lastMove: LastMove | null;
+  rng: Rng;
 };
