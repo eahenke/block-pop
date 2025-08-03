@@ -1,6 +1,8 @@
 import { ActionIcon, Modal as MantineModal } from '@mantine/core';
 import { MdArrowBack } from 'react-icons/md';
 
+const noop = () => {};
+
 export const Modal = ({
   opened,
   onClose,
@@ -10,12 +12,16 @@ export const Modal = ({
 }: {
   title: string;
   opened: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   onBack?: () => void;
   children: React.ReactNode;
 }) => {
   return (
-    <MantineModal.Root opened={opened} onClose={onClose} fullScreen={true}>
+    <MantineModal.Root
+      opened={opened}
+      onClose={onClose || noop}
+      fullScreen={true}
+    >
       <MantineModal.Overlay />
       <MantineModal.Content>
         <MantineModal.Header>
@@ -35,7 +41,7 @@ export const Modal = ({
           >
             {title}
           </MantineModal.Title>
-          <MantineModal.CloseButton />
+          {onClose ? <MantineModal.CloseButton /> : null}
         </MantineModal.Header>
         <MantineModal.Body>{children}</MantineModal.Body>
       </MantineModal.Content>

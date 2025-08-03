@@ -6,6 +6,7 @@ import { Score } from '../score';
 import { Settings } from '../settings';
 import './game.css';
 import { ActionIcon } from '@mantine/core';
+import { GameOver } from '../game-over';
 
 export const Game = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -31,6 +32,7 @@ export const Game = () => {
         </section>
       </div>
       <Settings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <GameOver />
     </div>
   );
 };
