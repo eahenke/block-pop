@@ -22,6 +22,7 @@ export type GameType = {
   board: Board;
   seed: string;
   level: Level;
+  completedLevels: Record<number, Level>;
   lastMove: LastMove | null;
   rng: Rng;
 };

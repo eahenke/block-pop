@@ -14,8 +14,7 @@ export const Game = () => {
   return (
     <div>
       <div className="game">
-        <section className="level-area">
-          <Level />
+        <section className="control-area">
           <ActionIcon
             variant="transparent"
             onClick={() => setSettingsOpen(true)}
@@ -23,6 +22,9 @@ export const Game = () => {
           >
             <MdOutlineSettings color="black" size={24} />
           </ActionIcon>
+        </section>
+        <section className="level-area">
+          <Level />
         </section>
         <section className="score-area">
           <Score />

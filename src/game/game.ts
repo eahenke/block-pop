@@ -41,6 +41,7 @@ export const initGame = (seed: string, reset = false): GameType => {
       blocks: 0,
       goal: getLevelGoal(1),
     },
+    completedLevels: {},
     lastMove: null,
     rng,
   };
@@ -91,6 +92,10 @@ const handleEndOfLevel = (game: GameType): GameType => {
       board: generateBoard(game.rng),
       level: newLevel(game.level.level + 1),
       lastMove: null,
+      completedLevels: {
+        ...game.completedLevels,
+        [game.level.level]: game.level,
+      },
     };
   } else {
     // Game over

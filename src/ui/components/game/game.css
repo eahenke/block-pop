@@ -5,9 +5,16 @@
   display: grid;
   row-gap: 1rem;
   grid-template-areas:
+    'controls'
     'level'
     'score'
     'board';
+}
+
+.control-area {
+  grid-area: 'control';
+  display: flex;
+  justify-content: flex-end;
 }
 
 .level-area {
