@@ -67,13 +67,10 @@ if (!self.define) {
     });
   };
 }
-define(['./workbox-3337e4ed'], (function (workbox) { 'use strict';
+define(['./workbox-4da76df9'], (function (workbox) { 'use strict';
 
-  self.addEventListener('message', event => {
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-      self.skipWaiting();
-    }
-  });
+  self.skipWaiting();
+  workbox.clientsClaim();
 
   /**
    * The precacheAndRoute() method efficiently caches and responds to
@@ -81,17 +78,41 @@ define(['./workbox-3337e4ed'], (function (workbox) { 'use strict';
    * See https://goo.gl/S9QRab
    */
   workbox.precacheAndRoute([{
+    "url": "apple-touch-icon-180x180.png",
+    "revision": "9d9ded1d95901de07ddd1e7d3363621c"
+  }, {
     "url": "assets/index-Cnep7pRw.css",
     "revision": null
   }, {
-    "url": "assets/index-DXC5k9UI.js",
+    "url": "assets/index-CpAluJsy.js",
     "revision": null
   }, {
+    "url": "favicon.ico",
+    "revision": "dc944ffdb734f0358cdb339d52ac230e"
+  }, {
     "url": "index.html",
-    "revision": "2d7c06a626e902150f495feb9c830527"
+    "revision": "908e82d2a2249a3840e6302318235728"
+  }, {
+    "url": "logo.png",
+    "revision": "426acec02ed995f6b5a42cafa532e59f"
+  }, {
+    "url": "maskable-icon-512x512.png",
+    "revision": "5a9a9f7a8272fae2b8a0c86f995a8a0f"
+  }, {
+    "url": "pwa-192x192.png",
+    "revision": "e9e9086fc577c80867b7d495cc252355"
+  }, {
+    "url": "pwa-512x512.png",
+    "revision": "a0143a722a9849f7dd3e023c205c1632"
+  }, {
+    "url": "pwa-64x64.png",
+    "revision": "29c7c6ab10c1faf9ec04a37407225a4b"
   }, {
     "url": "registerSW.js",
     "revision": "9d0b8cd5c8ffb7985f3de671afd96c9d"
+  }, {
+    "url": "vite.svg",
+    "revision": "8e3a10e157f75ada21ab742c022d5430"
   }, {
     "url": "pwa-192x192.png",
     "revision": "e9e9086fc577c80867b7d495cc252355"
