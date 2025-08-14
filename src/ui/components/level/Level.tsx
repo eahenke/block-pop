@@ -4,14 +4,18 @@ import './level.css';
 
 export const Level = () => {
   const {
-    game: { seed, level },
+    game: { seed, level, mode },
   } = useGame();
   const { getHighScore } = useHighScore();
 
   return (
     <div className="level">
-      <span>Level: {level.level}</span>
-      <span>Goal: {level.goal}</span>
+      {mode === 'ENDLESS' ? (
+        <>
+          <span>Level: {level.level}</span>
+          <span>Goal: {level.goal}</span>
+        </>
+      ) : null}
       <span>High score: {getHighScore(seed, level.level) || 0}</span>
     </div>
   );

@@ -31,6 +31,8 @@ export const initGame = (seed: string, reset = false): GameType => {
   const rng = getRng(seed, reset);
 
   return {
+    // TODO: enable endless mode
+    mode: 'SINGLE',
     status: 'ACTIVE',
     score: 0,
     board: generateBoard(rng),
@@ -85,7 +87,7 @@ const newLevel = (level: number): Level => {
 };
 
 const handleEndOfLevel = (game: GameType): GameType => {
-  if (game.score >= game.level.goal) {
+  if (game.mode === 'ENDLESS' && game.score >= game.level.goal) {
     // Level up
     return {
       ...game,

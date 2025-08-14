@@ -2,9 +2,11 @@ import { Box, Button, Text } from '@mantine/core';
 import { useGame } from '../../hooks/use-game';
 import { Modal } from '../common';
 import { generateSeed } from '../../../game/seed';
+import { useHighScore } from '../../hooks/use-high-score';
 
 export const GameOver = () => {
   const { game, init } = useGame();
+  const { getHighScore } = useHighScore();
   const isGameOver = game.status === 'DONE';
 
   if (!isGameOver) {
@@ -33,6 +35,9 @@ export const GameOver = () => {
       <Box my="lg" ta="center">
         <Text size="lg">Level: {game.level.level}</Text>
         <Text size="lg">Score: {game.score}</Text>
+        <Text size="lg">
+          Highscore: {getHighScore(game.seed, game.level.level)}
+        </Text>
       </Box>
       <Box mt="lg">
         <Button

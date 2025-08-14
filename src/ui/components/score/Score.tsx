@@ -1,14 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { useGame } from '../../hooks/use-game';
+import type { GameType } from '../../../game/types';
+import { useHighScore } from '../../hooks/use-high-score';
+import './score.css';
 
 const SCORE_NOTICE_DURATION = 1000;
+const SCORE_SUCCESS_CLASS = 'score-success';
+
+const getScoreClass = (game: GameType, highScore: number) => {
+  const comparisonScore = game.mode === 'ENDLESS' ? game.level.goal : highScore;
+  return game.score >= comparisonScore ? SCORE_SUCCESS_CLASS : '';
+};
 
 export const Score = () => {
-  const {
-    game: { score, lastMove },
-  } = useGame();
+  const { getHighScore } = useHighScore();
   const [showMove, setShowMoved] = useState(false);
   const timerRef = useRef<number | null>(null);
+  const { game } = useGame();
+  const { score, lastMove, level, seed } = game;
 
   useEffect(() => {
     if (!lastMove?.blocks || !lastMove?.score) {
@@ -31,9 +40,12 @@ export const Score = () => {
     };
   }, [lastMove, score]);
 
+  const highScore = getHighScore(seed, level.level);
+  const scoreClass = getScoreClass(game, highScore || 0);
+
   return (
     <div>
-      <p>Score: {score}</p>
+      <p className={scoreClass}>Score: {score}</p>
       <div style={{ height: '1.5rem' }}>
         {showMove && lastMove ? (
           <span>

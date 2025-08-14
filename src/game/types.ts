@@ -17,6 +17,7 @@ export type LastMove = {
 };
 
 export type GameType = {
+  mode: 'SINGLE' | 'ENDLESS';
   status: 'ACTIVE' | 'DONE';
   score: number;
   board: Board;
