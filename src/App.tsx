@@ -6,7 +6,7 @@ import { theme } from './ui/theme';
 
 function App() {
   return (
-    <MantineProvider theme={theme}>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
       <GameProvider>
         <Game />
       </GameProvider>

@@ -26,8 +26,8 @@ export const Modal = ({
       <MantineModal.Content>
         <MantineModal.Header>
           {onBack ? (
-            <ActionIcon variant="transparent" onClick={onBack}>
-              <MdArrowBack size={24} color="black" />
+            <ActionIcon color="text" variant="transparent" onClick={onBack}>
+              <MdArrowBack size={24} />
             </ActionIcon>
           ) : null}
           <MantineModal.Title
