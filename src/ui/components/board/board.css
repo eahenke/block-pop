@@ -1,3 +1,12 @@
+:root {
+  --block-spacing: 2px;
+  --block-color-1: #fcc736;
+  --block-color-2: #3cd4c2;
+  --block-color-3: #6879e4;
+  --block-color-4: #a85ed5;
+  --block-color-5: #f57c58;
+}
+
 .board-wrapper {
   overflow-x: auto;
 }
@@ -5,12 +14,12 @@
 .board {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
-  gap: 2px;
+  gap: var(--block-spacing);
 }
 
 .board-col {
   display: grid;
-  gap: 2px;
+  gap: var(--block-spacing);
 }
 
 .tile {
@@ -29,23 +38,23 @@
 }
 
 .tile-1 {
-  background-color: #f52887;
+  background-color: var(--block-color-1);
 }
 
 .tile-2 {
-  background-color: #87f717;
+  background-color: var(--block-color-2);
 }
 
 .tile-3 {
-  background-color: #842dce;
+  background-color: var(--block-color-3);
 }
 
 .tile-4 {
-  background-color: #1589bb;
+  background-color: var(--block-color-4);
 }
 
 .tile-5 {
-  background-color: #2e8b57;
+  background-color: var(--block-color-5);
 }
 
 .tile.empty {
