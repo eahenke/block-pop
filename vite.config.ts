@@ -7,6 +7,10 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      registerType: 'autoUpdate',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+      },
       manifest: {
         name: 'Block Pop',
         short_name: 'BlockPop',
@@ -23,6 +27,9 @@ export default defineConfig({
             type: 'image/png',
           },
         ],
+      },
+      devOptions: {
+        enabled: true,
       },
     }),
   ],
