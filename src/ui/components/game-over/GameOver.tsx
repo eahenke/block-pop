@@ -1,12 +1,9 @@
-import { Box, Button, Text } from '@mantine/core';
+import { Box, Button, Group, Text } from '@mantine/core';
 import { useGame } from '../../hooks/use-game';
-import { Modal } from '../common';
 import { generateSeed } from '../../../game/seed';
-import { useHighScore } from '../../hooks/use-high-score';
 
 export const GameOver = () => {
   const { game, init } = useGame();
-  const { getHighScore } = useHighScore();
   const isGameOver = game.status === 'DONE';
 
   if (!isGameOver) {
@@ -23,41 +20,16 @@ export const GameOver = () => {
   };
 
   return (
-    <Modal title="" opened={true}>
-      <h2>
-        <Text ta="center" size="48px">
-          Game Over!
-        </Text>
-        <Text ta="center" mt="md">
-          Seed: {game.seed}
-        </Text>
-      </h2>
-      <Box my="lg" ta="center">
-        <Text size="lg">Level: {game.level.level}</Text>
-        <Text size="lg">Score: {game.score}</Text>
-        <Text size="lg">
-          Highscore: {getHighScore(game.seed, game.level.level) || game.score}
-        </Text>
-      </Box>
-      <Box mt="lg">
-        <Button
-          size="lg"
-          mb="md"
-          fullWidth={true}
-          variant="filled"
-          onClick={handleRetry}
-        >
+    <Box mt="md">
+      <Text size="xl">Game Over!</Text>
+      <Group justify="space-around" mt="md">
+        <Button size="lg" variant="filled" onClick={handleRetry}>
           Retry
         </Button>
-        <Button
-          size="lg"
-          fullWidth={true}
-          variant="outline"
-          onClick={handleNewGame}
-        >
+        <Button size="lg" variant="outline" onClick={handleNewGame}>
           New Game
         </Button>
-      </Box>
-    </Modal>
+      </Group>
+    </Box>
   );
 };
