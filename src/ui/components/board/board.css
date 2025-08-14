@@ -5,12 +5,12 @@
 .board {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
-  gap: 1px;
+  gap: 2px;
 }
 
 .board-col {
   display: grid;
-  gap: 1px;
+  gap: 2px;
 }
 
 .tile {
@@ -29,23 +29,23 @@
 }
 
 .tile-1 {
-  background-color: red;
+  background-color: #f52887;
 }
 
 .tile-2 {
-  background-color: cyan;
+  background-color: #87f717;
 }
 
 .tile-3 {
-  background-color: lime;
+  background-color: #842dce;
 }
 
 .tile-4 {
-  background-color: purple;
+  background-color: #1589bb;
 }
 
 .tile-5 {
-  background-color: yellow;
+  background-color: #2e8b57;
 }
 
 .tile.empty {
