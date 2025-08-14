@@ -9,7 +9,7 @@ type HighScores = Record<string, HighScore>;
 
 export const useHighScore = () => {
   const { game } = useGame();
-  const { level, seed } = game;
+  const { level, seed, status } = game;
 
   const getHighScores = () => {
     const storedHighScores = localStorage.getItem(HIGH_SCORE_ITEM);
@@ -83,6 +83,16 @@ export const useHighScore = () => {
       score: completedLevel.score,
     });
   }, [level.level]);
+
+  useEffect(() => {
+    if (status === 'DONE') {
+      saveHighScore({
+        level: level.level,
+        seed,
+        score: level.score,
+      });
+    }
+  }, [status]);
 
   return {
     getHighScore,
