@@ -36,7 +36,7 @@ export const GameOver = () => {
         <Text size="lg">Level: {game.level.level}</Text>
         <Text size="lg">Score: {game.score}</Text>
         <Text size="lg">
-          Highscore: {getHighScore(game.seed, game.level.level)}
+          Highscore: {getHighScore(game.seed, game.level.level) || game.score}
         </Text>
       </Box>
       <Box mt="lg">
