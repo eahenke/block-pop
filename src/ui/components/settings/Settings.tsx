@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Box, Button, Text, TextInput } from '@mantine/core';
 import { MdFileUpload, MdRefresh, MdSave } from 'react-icons/md';
 
@@ -6,6 +6,7 @@ import { useGame } from '../../hooks/use-game';
 import { useSavedSeeds } from '../../hooks/use-saved-seeds';
 import { Menu, Modal } from '../common';
 import { generateSeed } from '../../../game/seed';
+import { useBackButton, usePushState } from '../../hooks/use-back-button';
 
 type SettingsProps = {
   open: boolean;
@@ -18,6 +19,7 @@ const SaveSeed = ({ seed, onDone }: { seed: string; onDone: () => void }) => {
   const { saveSeed } = useSavedSeeds();
   const [error, setError] = useState('');
   const [seedName, setSeedName] = useState('');
+  usePushState();
 
   const handleSave = () => {
     setError('');
@@ -51,6 +53,7 @@ const LoadSeed = ({ onDone }: { onDone: () => void }) => {
   const { getSavedSeeds } = useSavedSeeds();
   const [error, setError] = useState('');
   const { init } = useGame();
+  usePushState();
 
   const seeds = useMemo(() => {
     return getSavedSeeds();
@@ -82,6 +85,7 @@ const LoadSeed = ({ onDone }: { onDone: () => void }) => {
 
 const NewSeed = ({ onDone }: { onDone: () => void }) => {
   const { init } = useGame();
+  usePushState();
 
   const seed = generateSeed();
 
@@ -107,10 +111,22 @@ const NewSeed = ({ onDone }: { onDone: () => void }) => {
 export const Settings = ({ open, onClose }: SettingsProps) => {
   const { game } = useGame();
   const [section, setSection] = useState<SettingsSections>('settings');
+  usePushState();
 
   const toMainSettings = () => {
     setSection('settings');
   };
+
+  const handleBack = useCallback(() => {
+    if (section === 'settings') {
+      onClose();
+    } else {
+      toMainSettings();
+    }
+
+    return;
+  }, [section]);
+  useBackButton(handleBack);
 
   const handleClose = () => {
     toMainSettings();
