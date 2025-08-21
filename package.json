@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "NODE_ENV=production tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist -r git@github.com:eahenke/block-pop.git",
-    "generate-pwa-assets": "pwa-assets-generator"
+    "generate-pwa-assets": "pwa-assets-generator",
+    "analyze": "NODE_ENV=production vite build --debug"
   },
   "dependencies": {
     "@mantine/core": "^8.2.1",
@@ -38,6 +39,7 @@
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.4",
+    "vite-bundle-analyzer": "^1.2.1",
     "vite-plugin-pwa": "^1.0.2"
   }
 }
