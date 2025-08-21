@@ -1,19 +1,21 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Box, Button, Text, TextInput } from '@mantine/core';
-import { MdFileUpload, MdRefresh, MdSave } from 'react-icons/md';
+import { Box, Button, Group, Text, TextInput } from '@mantine/core';
+import { MdFileUpload, MdRefresh, MdSave, MdEdit } from 'react-icons/md';
 
 import { useGame } from '../../hooks/use-game';
 import { useSavedSeeds } from '../../hooks/use-saved-seeds';
 import { Menu, Modal } from '../common';
 import { generateSeed } from '../../../game/seed';
 import { useBackButton, usePushState } from '../../hooks/use-back-button';
+import { Seed } from '../seed';
+import { notifications } from '@mantine/notifications';
 
 type SettingsProps = {
   open: boolean;
   onClose: () => void;
 };
 
-type SettingsSections = 'settings' | 'save' | 'load' | 'new';
+type SettingsSections = 'settings' | 'save' | 'load' | 'new' | 'enter';
 
 const SaveSeed = ({ seed, onDone }: { seed: string; onDone: () => void }) => {
   const { saveSeed } = useSavedSeeds();
@@ -108,6 +110,44 @@ const NewSeed = ({ onDone }: { onDone: () => void }) => {
   );
 };
 
+const EnterSeed = ({ onDone }: { onDone: () => void }) => {
+  const { init } = useGame();
+  const [error, setError] = useState('');
+  const [seedValue, setSeedValue] = useState('');
+  usePushState();
+
+  const handleEnterSeed = () => {
+    setError('');
+    try {
+      init(seedValue, true);
+      //   saveSeed({ name: seedName, seed });
+      onDone();
+    } catch {
+      setError('Error entering seed');
+      notifications.show({
+        message: 'Failed to enter seed',
+      });
+    }
+  };
+
+  return (
+    <Box mt="sm">
+      <Box mb="sm">
+        <TextInput
+          value={seedValue}
+          onChange={e => setSeedValue(e.currentTarget.value)}
+          label="Seed"
+        />
+
+        {error ? <span>{error}</span> : null}
+      </Box>
+      <Button fullWidth={true} onClick={() => handleEnterSeed()}>
+        Start
+      </Button>
+    </Box>
+  );
+};
+
 export const Settings = ({ open, onClose }: SettingsProps) => {
   const { game } = useGame();
   const [section, setSection] = useState<SettingsSections>('settings');
@@ -140,11 +180,9 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
       onClose={handleClose}
       onBack={section === 'settings' ? undefined : toMainSettings}
     >
-      <div>
-        <Text variant="text" ta="center">
-          Current seed: {game.seed}
-        </Text>
-      </div>
+      <Group justify="center">
+        <Seed seed={game.seed} />
+      </Group>
       {section === 'settings' ? (
         <Box mt="md">
           <Menu
@@ -164,6 +202,11 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
                 icon: <MdRefresh size={24} />,
                 onClick: () => setSection('new'),
               },
+              {
+                title: 'Enter Seed',
+                icon: <MdEdit size={24} />,
+                onClick: () => setSection('enter'),
+              },
             ]}
           />
         </Box>
@@ -173,6 +216,7 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
         <SaveSeed seed={game.seed} onDone={toMainSettings} />
       ) : null}
       {section === 'new' ? <NewSeed onDone={handleClose} /> : null}
+      {section === 'enter' ? <EnterSeed onDone={handleClose} /> : null}
     </Modal>
   );
 };

@@ -1,6 +1,7 @@
-import { Box, Text } from '@mantine/core';
+import { Group } from '@mantine/core';
 import { useGame } from '../../hooks/use-game';
 import './board.css';
+import { Seed } from '../seed';
 
 export const Board = () => {
   const { game, removeBlock } = useGame();
@@ -26,9 +27,9 @@ export const Board = () => {
           </div>
         ))}
       </div>
-      <Box mt="lg">
-        <Text ta="center">Current seed: {game.seed}</Text>
-      </Box>
+      <Group mt="lg" justify="center">
+        <Seed seed={game.seed} />
+      </Group>
     </div>
   );
 };
