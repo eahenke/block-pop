@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useGame } from '../../hooks/use-game';
 import type { GameType } from '../../../game/types';
-import { useHighScore } from '../../hooks/use-high-score';
 import './score.css';
 
 const SCORE_NOTICE_DURATION = 1000;
@@ -13,11 +12,10 @@ const getScoreClass = (game: GameType, highScore: number) => {
 };
 
 export const Score = () => {
-  const { getHighScore } = useHighScore();
   const [showMove, setShowMoved] = useState(false);
   const timerRef = useRef<number | null>(null);
   const { game } = useGame();
-  const { score, lastMove, level, seed } = game;
+  const { score, lastMove } = game;
 
   useEffect(() => {
     if (!lastMove?.blocks || !lastMove?.score) {
@@ -40,7 +38,7 @@ export const Score = () => {
     };
   }, [lastMove, score]);
 
-  const highScore = getHighScore(seed, level.level);
+  const highScore = game.highScore;
   const scoreClass = getScoreClass(game, highScore || 0);
 
   return (

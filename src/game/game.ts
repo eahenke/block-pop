@@ -10,6 +10,7 @@ import {
   shiftLeft,
 } from './matrix';
 import { getLevelGoal, score } from './score';
+import { getHighScoreForSeed } from './high-score';
 
 const generateTileValue = (rng: Rng) => {
   return Math.floor(rng.random() * COLORS + 1);
@@ -29,6 +30,7 @@ const generateBoard = (rng: Rng) => {
 
 export const initGame = (seed: string, reset = false): GameType => {
   const rng = getRng(seed, reset);
+  const highScores = getHighScoreForSeed(seed) || {};
 
   return {
     // TODO: enable endless mode
@@ -46,6 +48,8 @@ export const initGame = (seed: string, reset = false): GameType => {
     completedLevels: {},
     lastMove: null,
     rng,
+    highScore: highScores?.[1] || 0,
+    highScores,
   };
 };
 
@@ -88,16 +92,18 @@ const newLevel = (level: number): Level => {
 
 const handleEndOfLevel = (game: GameType): GameType => {
   if (game.mode === 'ENDLESS' && game.score >= game.level.goal) {
+    const nextLevel = game.level.level + 1;
     // Level up
     return {
       ...game,
       board: generateBoard(game.rng),
-      level: newLevel(game.level.level + 1),
+      level: newLevel(nextLevel),
       lastMove: null,
       completedLevels: {
         ...game.completedLevels,
         [game.level.level]: game.level,
       },
+      highScore: game.highScores[nextLevel] || 0,
     };
   } else {
     // Game over

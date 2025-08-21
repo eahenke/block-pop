@@ -1,12 +1,10 @@
 import { useGame } from '../../hooks/use-game';
-import { useHighScore } from '../../hooks/use-high-score';
 import './level.css';
 
 export const Level = () => {
   const {
-    game: { seed, level, mode },
+    game: { level, mode, highScore },
   } = useGame();
-  const { getHighScore } = useHighScore();
 
   return (
     <div className="level">
@@ -16,7 +14,7 @@ export const Level = () => {
           <span>Goal: {level.goal}</span>
         </>
       ) : null}
-      <span>High score: {getHighScore(seed, level.level) || 0}</span>
+      <span>High score: {highScore || 0}</span>
     </div>
   );
 };

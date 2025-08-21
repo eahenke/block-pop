@@ -8,8 +8,10 @@ import { Settings } from '../settings';
 import './game.css';
 import { ActionIcon } from '@mantine/core';
 import { GameOver } from '../game-over';
+import { useHighScore } from '../../hooks/use-high-score';
 
 export const Game = () => {
+  useHighScore();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { setColorScheme, colorScheme } = useMantineColorScheme();
 
