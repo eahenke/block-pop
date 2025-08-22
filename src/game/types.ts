@@ -9,16 +9,29 @@ export type Level = {
   score: number;
   blocks: number;
   goal: number;
+  moves: Coord[];
 };
 
 export type LastMove = {
   blocks: number;
   score: number;
+  coord: Coord;
 };
 
-export type HighScore = Record<number, number>;
+export type HighScore = {
+  score: number;
+  moves: HighScoreMoves;
+};
 
-export type HighScores = Record<string, HighScore>;
+export type HighScoreLevels = Record<number, HighScore | number>;
+
+export type HighScores = Record<string, HighScoreLevels>;
+
+export type HighScoreMoves = Coord[];
+
+export type ViewOptions = {
+  hint: boolean;
+};
 
 export type GameType = {
   mode: 'SINGLE' | 'ENDLESS';
@@ -30,6 +43,7 @@ export type GameType = {
   completedLevels: Record<number, Level>;
   lastMove: LastMove | null;
   rng: Rng;
-  highScores: HighScore;
+  highScores: HighScoreLevels;
   highScore: number;
+  viewOptions: ViewOptions;
 };

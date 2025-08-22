@@ -10,7 +10,7 @@ import {
   shiftLeft,
 } from './matrix';
 import { getLevelGoal, score } from './score';
-import { getHighScoreForSeed } from './high-score';
+import { getHighScoreForSeed, getHighScoreValue } from './high-score';
 
 const generateTileValue = (rng: Rng) => {
   return Math.floor(rng.random() * COLORS + 1);
@@ -44,12 +44,17 @@ export const initGame = (seed: string, reset = false): GameType => {
       score: 0,
       blocks: 0,
       goal: getLevelGoal(1),
+      moves: [],
     },
     completedLevels: {},
     lastMove: null,
     rng,
-    highScore: highScores?.[1] || 0,
+    // highScore: highScores?.[1] || 0,
+    highScore: getHighScoreValue(highScores?.[1]) || 0,
     highScores,
+    viewOptions: {
+      hint: false,
+    },
   };
 };
 
@@ -78,6 +83,7 @@ const updateLevel = (game: GameType, lastMove: LastMove): Level => {
     ...game.level,
     score: game.level.score + lastMove.score,
     blocks: game.level.blocks + lastMove.blocks,
+    moves: [...game.level.moves, lastMove.coord],
   };
 };
 
@@ -87,6 +93,7 @@ const newLevel = (level: number): Level => {
     score: 0,
     blocks: 0,
     goal: getLevelGoal(level),
+    moves: [],
   };
 };
 
@@ -103,7 +110,8 @@ const handleEndOfLevel = (game: GameType): GameType => {
         ...game.completedLevels,
         [game.level.level]: game.level,
       },
-      highScore: game.highScores[nextLevel] || 0,
+      //   highScore: game.highScores[nextLevel] || 0,
+      highScore: getHighScoreValue(game.highScores[nextLevel]) || 0,
     };
   } else {
     // Game over
@@ -137,6 +145,7 @@ export const gameReducer = (game: GameType, action: Action): GameType => {
       const lastMove = {
         blocks: filled.size,
         score: points,
+        coord,
       };
 
       return {
@@ -161,6 +170,15 @@ export const gameReducer = (game: GameType, action: Action): GameType => {
       }
 
       return updatedGame;
+    }
+    case ACTIONS.SET_VIEW_OPTIONS: {
+      return {
+        ...game,
+        viewOptions: {
+          ...game.viewOptions,
+          ...action.payload,
+        },
+      };
     }
     default: {
       return game;

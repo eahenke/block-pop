@@ -18,7 +18,7 @@ export const useHighScore = () => {
     }
 
     saveHighScore({
-      level: completedLevel.level,
+      level: completedLevel,
       seed,
       score: completedLevel.score,
     });
@@ -27,7 +27,7 @@ export const useHighScore = () => {
   useEffect(() => {
     if (status === 'DONE') {
       saveHighScore({
-        level: level.level,
+        level: level,
         seed,
         score: level.score,
       });

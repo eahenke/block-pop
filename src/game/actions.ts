@@ -1,8 +1,11 @@
+import type { ViewOptions } from './types';
+
 export const ACTIONS = {
   INIT: 'INIT',
   RESTART: 'RESTART',
   REMOVE: 'REMOVE',
   UPDATE: 'UPDATE',
+  SET_VIEW_OPTIONS: 'SET_VIEW_OPTIONS',
 } as const;
 
 type InitAction = {
@@ -29,4 +32,14 @@ type RestartAction = {
   type: typeof ACTIONS.RESTART;
 };
 
-export type Action = InitAction | RemoveAction | UpdateAction | RestartAction;
+type SetViewOptionsAction = {
+  type: typeof ACTIONS.SET_VIEW_OPTIONS;
+  payload: Partial<ViewOptions>;
+};
+
+export type Action =
+  | InitAction
+  | RemoveAction
+  | UpdateAction
+  | RestartAction
+  | SetViewOptionsAction;

@@ -10,12 +10,14 @@
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist -r git@github.com:eahenke/block-pop.git",
     "generate-pwa-assets": "pwa-assets-generator",
-    "analyze": "NODE_ENV=production vite build --debug"
+    "analyze": "NODE_ENV=production vite build --debug",
+    "ts:check": "tsc --noEmit"
   },
   "dependencies": {
     "@mantine/core": "^8.2.1",
     "@mantine/hooks": "^8.2.1",
     "@mantine/notifications": "^8.2.5",
+    "classnames": "^2.5.1",
     "rand-seed": "^3.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

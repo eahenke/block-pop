@@ -1,12 +1,15 @@
 import { Group } from '@mantine/core';
+import cx from 'classnames';
 import { useGame } from '../../hooks/use-game';
 import './board.css';
 import { Seed } from '../seed';
+import { getNextMove, isSameCoord } from '../../../game';
 
 export const Board = () => {
   const { game, removeBlock } = useGame();
 
   const board = game.board;
+  const nextMove = getNextMove(game);
 
   const onClick = (col: number, row: number) => {
     removeBlock(col, row);
@@ -20,7 +23,12 @@ export const Board = () => {
             {col.map((val, rIdx) => (
               <div
                 onClick={() => onClick(cIdx, rIdx)}
-                className={`tile tile-${val}`}
+                className={cx(`tile tile-${val}`, {
+                  'next-move':
+                    game.viewOptions.hint &&
+                    nextMove &&
+                    isSameCoord(nextMove, [cIdx, rIdx]),
+                })}
                 key={`${cIdx},${rIdx}`}
               ></div>
             ))}

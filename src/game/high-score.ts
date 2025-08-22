@@ -1,6 +1,16 @@
-import type { HighScores } from './types';
+import type { HighScore, HighScores, Level } from './types';
 
 const HIGH_SCORE_ITEM = 'highScore';
+
+export const isComplexHighScore = (hs: number | HighScore): hs is HighScore => {
+  return typeof hs !== 'number';
+};
+
+export const getHighScoreValue = (hs?: number | HighScore | null): number => {
+  if (!hs) return 0;
+
+  return isComplexHighScore(hs) ? hs.score : hs;
+};
 
 const getHighScores = () => {
   try {
@@ -30,12 +40,15 @@ export const saveHighScore = ({
 }: {
   seed: string;
   score: number;
-  level: number;
+  level: Level;
 }): void => {
   const highScores = getHighScores() || {};
   try {
-    const levelHighScore = highScores[seed]?.[level] || 0;
-    if (score <= levelHighScore) {
+    const levelHighScore = highScores[seed]?.[level.level];
+
+    const hsToCompare = getHighScoreValue(levelHighScore);
+
+    if (score <= (hsToCompare || 0)) {
       return;
     }
 
@@ -43,7 +56,10 @@ export const saveHighScore = ({
       ...highScores,
       [seed]: {
         ...highScores[seed],
-        [level]: score,
+        [level.level]: {
+          score,
+          moves: level.moves,
+        },
       },
     };
 
