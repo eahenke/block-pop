@@ -28,7 +28,12 @@ export const Seed = ({ seed }: SeedProps) => {
   return (
     <Group component="span" align="center">
       <Text component="span">Current seed: {seed}</Text>
-      <ActionIcon color="text" onClick={handleCopy} aria-label="Copy">
+      <ActionIcon
+        variant="transparent"
+        color="text"
+        onClick={handleCopy}
+        aria-label="Copy"
+      >
         <MdContentCopy size="24" />
       </ActionIcon>
     </Group>
