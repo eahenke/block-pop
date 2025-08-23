@@ -49,11 +49,11 @@ export const initGame = (seed: string, reset = false): GameType => {
     completedLevels: {},
     lastMove: null,
     rng,
-    // highScore: highScores?.[1] || 0,
     highScore: getHighScoreValue(highScores?.[1]) || 0,
     highScores,
     viewOptions: {
       hint: false,
+      colorblind: false,
     },
   };
 };

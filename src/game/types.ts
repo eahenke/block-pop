@@ -30,6 +30,7 @@ export type HighScores = Record<string, HighScoreLevels>;
 export type HighScoreMoves = Coord[];
 
 export type ViewOptions = {
+  colorblind: boolean;
   hint: boolean;
 };
 

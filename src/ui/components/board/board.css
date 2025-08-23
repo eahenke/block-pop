@@ -65,3 +65,33 @@
 .next-move {
   box-shadow: 0 0 0 3px var(--mantine-color-bright);
 }
+
+.block-icon {
+  width: 60%;
+  height: 60%;
+  filter: brightness(0.6);
+}
+
+.block-icon-1 {
+  color: var(--block-color-1);
+}
+
+.block-icon-2 {
+  color: var(--block-color-2);
+}
+
+.block-icon-3 {
+  color: var(--block-color-3);
+}
+
+.block-icon-4 {
+  color: var(--block-color-4);
+}
+
+.block-icon-5 {
+  color: var(--block-color-5);
+}
+
+.block-icon.invisible {
+  visibility: hidden;
+}

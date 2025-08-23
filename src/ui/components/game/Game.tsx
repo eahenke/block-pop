@@ -3,6 +3,7 @@ import {
   MdOutlineSettings,
   MdOutlinePalette,
   MdOutlineHighlight,
+  MdOutlineAccessibility,
 } from 'react-icons/md';
 import { useMantineColorScheme } from '@mantine/core';
 import { Board } from '../board';
@@ -14,6 +15,7 @@ import { ActionIcon } from '@mantine/core';
 import { GameOver } from '../game-over';
 import { useHighScore } from '../../hooks/use-high-score';
 import { useGame } from '../../hooks/use-game';
+import type { ViewOptions } from '../../../game/types';
 
 export const Game = () => {
   useHighScore();
@@ -26,8 +28,8 @@ export const Game = () => {
     setColorScheme(nextScheme);
   };
 
-  const toggleHint = () => {
-    setViewOptions({ hint: !game.viewOptions.hint });
+  const toggleViewOption = (option: keyof ViewOptions) => () => {
+    setViewOptions({ [option]: !game.viewOptions[option] });
   };
 
   return (
@@ -35,9 +37,17 @@ export const Game = () => {
       <div className="game">
         <section className="control-area">
           <ActionIcon
+            color={game.viewOptions.colorblind ? '' : 'text'}
+            variant="transparent"
+            onClick={toggleViewOption('colorblind')}
+            aria-label="Accessibility"
+          >
+            <MdOutlineAccessibility size={24} />
+          </ActionIcon>
+          <ActionIcon
             color={game.viewOptions.hint ? '' : 'text'}
             variant="transparent"
-            onClick={toggleHint}
+            onClick={toggleViewOption('hint')}
             aria-label="Hint"
           >
             <MdOutlineHighlight size={24} />
