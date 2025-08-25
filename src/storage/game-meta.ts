@@ -1,40 +1,41 @@
-import type { GameMeta, ViewOptions } from '../game/types';
+import type { ViewOptions } from '../game/types';
 
-const GAME_META_KEY = 'gameMeta';
+const CURRENT_SEED_KEY = 'currentSeed';
+const VIEW_OPTIONS_KEY = 'blockPopViewOptions';
 
-export const getGameMeta = (): GameMeta | null => {
+export const getCurrentSeed = (): string | null => {
   try {
-    const gameMetaRaw = localStorage.getItem(GAME_META_KEY);
-    if (!gameMetaRaw) return null;
-
-    const gameMeta: GameMeta = JSON.parse(gameMetaRaw);
-
-    return gameMeta;
+    return localStorage.getItem(CURRENT_SEED_KEY) || null;
   } catch (e) {
-    console.error('Error getting GameMeta', e);
+    console.error('Error getting CurrentSeed', e);
+    return null;
+  }
+};
+
+export const saveCurrentSeed = (seed: string) => {
+  localStorage.setItem(CURRENT_SEED_KEY, seed);
+};
+
+export const getViewOptions = (): ViewOptions | null => {
+  try {
+    const viewOptionsRaw = localStorage.getItem(VIEW_OPTIONS_KEY);
+    if (!viewOptionsRaw) return null;
+
+    const viewOptions: ViewOptions = JSON.parse(viewOptionsRaw);
+
+    return viewOptions;
+  } catch (e) {
+    console.error('Error getting ViewOptions', e);
     return null;
   }
 };
 
 export const saveViewOptions = (options: Partial<ViewOptions>) => {
-  const currentGameMeta = getGameMeta();
-  if (!currentGameMeta) return;
+  const currentViewOptions = getViewOptions() || {};
 
-  const updatedGameMeta: GameMeta = {
-    ...currentGameMeta,
-    viewOptions: {
-      ...currentGameMeta?.viewOptions,
-      ...options,
-    },
+  const updatedOptions: ViewOptions = {
+    ...currentViewOptions,
+    ...options,
   };
-  localStorage.setItem(GAME_META_KEY, JSON.stringify(updatedGameMeta));
-};
-
-export const saveGameMeta = (gameMeta: Partial<GameMeta>) => {
-  const currentGameMeta = getGameMeta();
-  const updatedGameMeta = {
-    ...currentGameMeta,
-    ...gameMeta,
-  };
-  localStorage.setItem(GAME_META_KEY, JSON.stringify(updatedGameMeta));
+  localStorage.setItem(VIEW_OPTIONS_KEY, JSON.stringify(updatedOptions));
 };

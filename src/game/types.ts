@@ -18,10 +18,9 @@ export type LastMove = {
   coord: Coord;
 };
 
-// TODO: add darkMode boolean
 export type ViewOptions = {
-  colorblind: boolean;
-  hint: boolean;
+  colorblind?: boolean;
+  hint?: boolean;
 };
 
 export type GameType = {
@@ -54,8 +53,3 @@ export type SeedInfo = {
 };
 
 export type SeedHistory = Record<string, SeedInfo>;
-
-export type GameMeta = {
-  viewOptions: ViewOptions;
-  currentSeed: string;
-};

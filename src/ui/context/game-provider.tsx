@@ -4,8 +4,9 @@ import { ACTIONS } from '../../game/actions';
 import { GameContext } from './game-context';
 import type { ViewOptions } from '../../game/types';
 import {
-  getGameMeta,
-  saveGameMeta,
+  getCurrentSeed,
+  getViewOptions,
+  saveCurrentSeed,
   saveViewOptions,
 } from '../../storage/game-meta';
 import { getSeedInfo } from '../../storage';
@@ -13,13 +14,13 @@ import { getSeedInfo } from '../../storage';
 const defaultInitialSeed = '1234567890';
 
 // INIT
-const gameMeta = getGameMeta();
-const initialSeed = gameMeta?.currentSeed || defaultInitialSeed;
+const initialViewOptions = getViewOptions();
+const initialSeed = getCurrentSeed() || defaultInitialSeed;
 const seedInfo = getSeedInfo(initialSeed);
 
 const initialState = initGame({
   seed: initialSeed,
-  viewOptions: gameMeta?.viewOptions,
+  viewOptions: initialViewOptions || undefined,
   seedInfo,
   reset: true,
 });
@@ -50,23 +51,20 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const init = (seed: string, reset = false) => {
-    const gameMeta = getGameMeta();
+    const currentSeed = getCurrentSeed();
+    const viewOptions = getViewOptions();
     const seedInfo = getSeedInfo(seed);
 
-    // TODO: default view options function
-    saveGameMeta(
-      gameMeta ?? {
-        currentSeed: seed,
-        viewOptions: { hint: false, colorblind: false },
-      }
-    );
+    if (currentSeed !== seed) {
+      saveCurrentSeed(seed);
+    }
 
     dispatch({
       type: ACTIONS.INIT,
       payload: {
         seed,
         reset,
-        viewOptions: gameMeta?.viewOptions,
+        viewOptions: viewOptions,
         seedInfo,
       },
     });
