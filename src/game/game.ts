@@ -1,7 +1,15 @@
-import type { Board, Coord, GameType, LastMove, Level } from './types';
+import type {
+  Board,
+  Coord,
+  GameType,
+  LastMove,
+  Level,
+  SeedInfo,
+  ViewOptions,
+} from './types';
 import { getRng, type Rng } from './rng';
 import { ACTIONS, type Action } from './actions';
-import { COLORS, BOARD_SIZE, EMPTY_VALUE } from './constants';
+import { COLORS, BOARD_SIZE, EMPTY_VALUE, TOTAL_BLOCKS } from './constants';
 import {
   applyGravity,
   copyBoard,
@@ -10,7 +18,7 @@ import {
   shiftLeft,
 } from './matrix';
 import { getLevelGoal, score } from './score';
-import { getHighScoreForSeed, getHighScoreValue } from './high-score';
+import { getHighScore } from './high-score';
 
 const generateTileValue = (rng: Rng) => {
   return Math.floor(rng.random() * COLORS + 1);
@@ -28,9 +36,20 @@ const generateBoard = (rng: Rng) => {
   return board;
 };
 
-export const initGame = (seed: string, reset = false): GameType => {
+type InitGameArgs = {
+  seed: string;
+  reset: boolean;
+  viewOptions?: ViewOptions;
+  seedInfo?: SeedInfo | null;
+};
+
+export const initGame = ({
+  seed,
+  reset,
+  viewOptions,
+  seedInfo,
+}: InitGameArgs): GameType => {
   const rng = getRng(seed, reset);
-  const highScores = getHighScoreForSeed(seed) || {};
 
   return {
     // TODO: enable endless mode
@@ -49,13 +68,44 @@ export const initGame = (seed: string, reset = false): GameType => {
     completedLevels: {},
     lastMove: null,
     rng,
-    highScore: getHighScoreValue(highScores?.[1]) || 0,
-    highScores,
-    viewOptions: {
+    highScore: seedInfo?.highScore ?? null,
+    viewOptions: viewOptions ?? {
       hint: false,
       colorblind: false,
     },
+    seedInfo: seedInfo
+      ? {
+          ...seedInfo,
+          attempts: seedInfo.attempts + 1,
+          lastPlayed: new Date().toISOString(),
+        }
+      : {
+          seed,
+          lastPlayed: new Date().toISOString(),
+          attempts: 1,
+          highScore: null,
+        },
   };
+};
+
+const updateSeedInfo = (game: GameType): SeedInfo => {
+  const highScoreRecord = getHighScore(game);
+
+  const highScoreValue = highScoreRecord?.score || 0;
+  const updatedRecord: SeedInfo =
+    game.score <= highScoreValue
+      ? game.seedInfo
+      : {
+          ...game.seedInfo,
+          highScore: {
+            moves: game.level.moves,
+            blocksRemaining: TOTAL_BLOCKS - game.level.blocks,
+            attempt: game.seedInfo.attempts,
+            score: game.score,
+          },
+        };
+
+  return updatedRecord;
 };
 
 export const isValidMove = (board: Board, coord: Coord) => {
@@ -110,13 +160,15 @@ const handleEndOfLevel = (game: GameType): GameType => {
         ...game.completedLevels,
         [game.level.level]: game.level,
       },
-      //   highScore: game.highScores[nextLevel] || 0,
-      highScore: getHighScoreValue(game.highScores[nextLevel]) || 0,
+      // TODO: highscore endless handling?
     };
   } else {
     // Game over
+    const seedInfo = updateSeedInfo(game);
+
     return {
       ...game,
+      seedInfo,
       status: 'DONE',
     };
   }
@@ -125,7 +177,20 @@ const handleEndOfLevel = (game: GameType): GameType => {
 export const gameReducer = (game: GameType, action: Action): GameType => {
   switch (action.type) {
     case ACTIONS.INIT: {
-      return initGame(action.payload.seed, action.payload.reset);
+      return initGame({
+        seed: action.payload.seed,
+        reset: action.payload.reset || false,
+        viewOptions: game.viewOptions,
+        seedInfo: action.payload.seedInfo,
+      });
+    }
+    case ACTIONS.RESTART: {
+      return initGame({
+        seed: game.seed,
+        reset: true,
+        viewOptions: game.viewOptions,
+        seedInfo: game.seedInfo,
+      });
     }
     case ACTIONS.REMOVE: {
       const { col, row } = action.payload;

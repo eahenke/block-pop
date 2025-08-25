@@ -15,7 +15,7 @@ export const useSavedSeeds = () => {
 
       return Object.entries(record).map(([name, seed]) => ({ name, seed }));
     } catch (e) {
-      console.log('Error getting seeds', e);
+      console.error('Error getting seeds', e);
       return [];
     }
   };

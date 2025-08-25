@@ -1,4 +1,4 @@
-import type { ViewOptions } from './types';
+import type { SeedInfo, ViewOptions } from './types';
 
 export const ACTIONS = {
   INIT: 'INIT',
@@ -13,6 +13,8 @@ type InitAction = {
   payload: {
     seed: string;
     reset?: boolean;
+    viewOptions?: ViewOptions | null;
+    seedInfo?: SeedInfo | null;
   };
 };
 

@@ -3,10 +3,26 @@ import { gameReducer, initGame } from '../../game/game';
 import { ACTIONS } from '../../game/actions';
 import { GameContext } from './game-context';
 import type { ViewOptions } from '../../game/types';
+import {
+  getGameMeta,
+  saveGameMeta,
+  saveViewOptions,
+} from '../../storage/game-meta';
+import { getSeedInfo } from '../../storage';
 
-const seed = '1234567890';
+const defaultInitialSeed = '1234567890';
 
-const initialState = initGame(seed);
+// INIT
+const gameMeta = getGameMeta();
+const initialSeed = gameMeta?.currentSeed || defaultInitialSeed;
+const seedInfo = getSeedInfo(initialSeed);
+
+const initialState = initGame({
+  seed: initialSeed,
+  viewOptions: gameMeta?.viewOptions,
+  seedInfo,
+  reset: true,
+});
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [game, dispatch] = useReducer(gameReducer, initialState);
@@ -34,16 +50,30 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const init = (seed: string, reset = false) => {
+    const gameMeta = getGameMeta();
+    const seedInfo = getSeedInfo(seed);
+
+    // TODO: default view options function
+    saveGameMeta(
+      gameMeta ?? {
+        currentSeed: seed,
+        viewOptions: { hint: false, colorblind: false },
+      }
+    );
+
     dispatch({
       type: ACTIONS.INIT,
       payload: {
         seed,
         reset,
+        viewOptions: gameMeta?.viewOptions,
+        seedInfo,
       },
     });
   };
 
   const setViewOptions = (options: Partial<ViewOptions>) => {
+    saveViewOptions(options);
     dispatch({
       type: ACTIONS.SET_VIEW_OPTIONS,
       payload: options,

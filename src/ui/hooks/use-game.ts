@@ -7,6 +7,7 @@ type GameUiInterface = {
   game: GameType;
   removeBlock: (col: number, row: number) => void;
   init: (seed: string, reset?: boolean) => void;
+  restart: () => void;
   setViewOptions: (options: Partial<ViewOptions>) => void;
 };
 
@@ -16,7 +17,7 @@ export const useGame = (): GameUiInterface => {
     throw new Error('useGame must be used inside of a <GameProvider />');
   }
 
-  const { game, remove, update, init, setViewOptions } = context;
+  const { game, remove, update, init, setViewOptions, restart } = context;
 
   const removeBlock = (col: number, row: number) => {
     if (!isGameActive(game) || !isValidMove(game.board, [col, row])) {
@@ -32,6 +33,7 @@ export const useGame = (): GameUiInterface => {
   return {
     game,
     init,
+    restart,
     removeBlock,
     setViewOptions,
   };

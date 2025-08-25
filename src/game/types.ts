@@ -18,17 +18,7 @@ export type LastMove = {
   coord: Coord;
 };
 
-export type HighScore = {
-  score: number;
-  moves: HighScoreMoves;
-};
-
-export type HighScoreLevels = Record<number, HighScore | number>;
-
-export type HighScores = Record<string, HighScoreLevels>;
-
-export type HighScoreMoves = Coord[];
-
+// TODO: add darkMode boolean
 export type ViewOptions = {
   colorblind: boolean;
   hint: boolean;
@@ -44,7 +34,28 @@ export type GameType = {
   completedLevels: Record<number, Level>;
   lastMove: LastMove | null;
   rng: Rng;
-  highScores: HighScoreLevels;
-  highScore: number;
+  highScore: HighScore | null;
   viewOptions: ViewOptions;
+  seedInfo: SeedInfo;
+};
+
+export type HighScore = {
+  attempt: number;
+  score: number;
+  moves: Coord[];
+  blocksRemaining: number;
+};
+
+export type SeedInfo = {
+  seed: string;
+  attempts: number;
+  lastPlayed: string; // ISO date
+  highScore: HighScore | null;
+};
+
+export type SeedHistory = Record<string, SeedInfo>;
+
+export type GameMeta = {
+  viewOptions: ViewOptions;
+  currentSeed: string;
 };

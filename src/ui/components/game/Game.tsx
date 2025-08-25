@@ -4,6 +4,7 @@ import {
   MdOutlinePalette,
   MdOutlineHighlight,
   MdOutlineAccessibility,
+  MdRefresh,
 } from 'react-icons/md';
 import { useMantineColorScheme } from '@mantine/core';
 import { Board } from '../board';
@@ -13,15 +14,15 @@ import { Settings } from '../settings';
 import './game.css';
 import { ActionIcon } from '@mantine/core';
 import { GameOver } from '../game-over';
-import { useHighScore } from '../../hooks/use-high-score';
 import { useGame } from '../../hooks/use-game';
 import type { ViewOptions } from '../../../game/types';
+import { useSeedHistory } from '../../hooks/use-seed-history';
 
 export const Game = () => {
-  useHighScore();
+  useSeedHistory();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { setColorScheme, colorScheme } = useMantineColorScheme();
-  const { setViewOptions, game } = useGame();
+  const { setViewOptions, game, restart } = useGame();
 
   const toggleColorScheme = () => {
     const nextScheme = colorScheme === 'dark' ? 'light' : 'dark';
@@ -36,6 +37,14 @@ export const Game = () => {
     <div>
       <div className="game">
         <section className="control-area">
+          <ActionIcon
+            color="text"
+            variant="transparent"
+            onClick={restart}
+            aria-label="Restart"
+          >
+            <MdRefresh size={24} />
+          </ActionIcon>
           <ActionIcon
             color={game.viewOptions.colorblind ? '' : 'text'}
             variant="transparent"

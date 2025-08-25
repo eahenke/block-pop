@@ -3,7 +3,7 @@ import { useGame } from '../../hooks/use-game';
 import { generateSeed } from '../../../game/seed';
 
 export const GameOver = () => {
-  const { game, init } = useGame();
+  const { game, init, restart } = useGame();
   const isGameOver = game.status === 'DONE';
 
   if (!isGameOver) {
@@ -11,7 +11,7 @@ export const GameOver = () => {
   }
 
   const handleRetry = () => {
-    init(game.seed, true);
+    restart();
   };
 
   const handleNewGame = () => {

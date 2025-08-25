@@ -1,4 +1,4 @@
-import { isComplexHighScore } from './high-score';
+import { getHighScore } from './high-score';
 import type { Coord, GameType } from './types';
 
 export const isSameCoord = (a: Coord, b: Coord) => {
@@ -12,9 +12,9 @@ const isOnHsTrack = (currentMoves: Coord[], hsMoves: Coord[]) => {
 };
 
 export const getNextMove = (game: GameType) => {
-  const highScore = game.highScores?.[game.level.level];
+  const highScore = getHighScore(game);
 
-  if (!highScore || !isComplexHighScore(highScore)) {
+  if (!highScore) {
     return null;
   }
 
