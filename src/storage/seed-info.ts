@@ -1,13 +1,48 @@
-import type { SeedHistory, SeedInfo } from '../game/types';
+import type { Coord, SeedHistory, SeedInfo } from '../game/types';
 
 const SEED_INFO_KEY = 'seedInfo';
+
+const serializeMoves = (moves: Coord[]): string => {
+  return moves.flat().join('');
+};
+
+const deserializeMoves = (moveStr: string): Coord[] => {
+  const moves = [];
+  for (let i = 0; i < moveStr.length; i += 2) {
+    const coord: Coord = [
+      parseInt(moveStr[i], 10),
+      parseInt(moveStr[i + 1], 10),
+    ];
+    moves.push(coord);
+  }
+
+  return moves;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const seedInfoReviver = (key: string, value: any) => {
+  if (key === 'moves' && typeof value === 'string')
+    return deserializeMoves(value);
+
+  return value;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const seedInfoReplacer = (key: string, value: any) => {
+  if (key === 'moves') return serializeMoves(value);
+
+  return value;
+};
 
 const getSeedHistory = (): SeedHistory | null => {
   try {
     const seedHistoryRaw = localStorage.getItem(SEED_INFO_KEY);
     if (!seedHistoryRaw) return null;
 
-    const seedHistory: SeedHistory = JSON.parse(seedHistoryRaw);
+    const seedHistory: SeedHistory = JSON.parse(
+      seedHistoryRaw,
+      seedInfoReviver
+    );
 
     return seedHistory || null;
   } catch (e) {
@@ -33,9 +68,12 @@ export const saveSeedInfo = (seedInfo: SeedInfo): void => {
 
   localStorage.setItem(
     SEED_INFO_KEY,
-    JSON.stringify({
-      ...seedHistory,
-      [seedInfo.seed]: seedInfo,
-    })
+    JSON.stringify(
+      {
+        ...seedHistory,
+        [seedInfo.seed]: seedInfo,
+      },
+      seedInfoReplacer
+    )
   );
 };
