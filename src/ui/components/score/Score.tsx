@@ -3,7 +3,6 @@ import { useGame } from '../../hooks/use-game';
 import type { GameType } from '../../../game/types';
 import './score.css';
 import { getHighScore } from '../../../game/high-score';
-import { Group } from '@mantine/core';
 
 const SCORE_NOTICE_DURATION = 1000;
 const SCORE_SUCCESS_CLASS = 'score-success';
@@ -45,10 +44,7 @@ export const Score = () => {
 
   return (
     <div>
-      <Group justify="space-around">
-        <span>Attempt: {game.seedInfo.attempts}</span>
-        <span className={scoreClass}>Score: {score}</span>
-      </Group>
+      <p className={scoreClass}>Score: {score}</p>
       <div style={{ height: '1.5rem' }}>
         {showMove && lastMove ? (
           <span>

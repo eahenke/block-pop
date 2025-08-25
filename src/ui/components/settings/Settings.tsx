@@ -100,7 +100,10 @@ const NewSeed = ({ onDone }: { onDone: () => void }) => {
     <>
       <Box mb="sm" mt="sm">
         <Text>
-          This will start a new game with seed <Text fw={700}>{seed}</Text>
+          This will start a new game with seed{' '}
+          <Text component="span" fw={700}>
+            {seed}
+          </Text>
         </Text>
       </Box>
       <Button fullWidth={true} onClick={handleNewSeed}>

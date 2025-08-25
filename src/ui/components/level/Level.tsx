@@ -17,8 +17,6 @@ export const Level = () => {
         </>
       ) : null}
       <span>High score: {highScore?.score || 0}</span>
-      {/* TODO: clean up if no attempt */}
-      <span>on attempt: {highScore?.attempt || 0}</span>
     </div>
   );
 };

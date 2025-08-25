@@ -6,7 +6,7 @@ import {
   MdOutlineNightlight,
   MdOutlineStarBorder,
 } from 'react-icons/md';
-import { Group } from '@mantine/core';
+import { Group, Text } from '@mantine/core';
 import cx from 'classnames';
 import { useGame } from '../../hooks/use-game';
 import './board.css';
@@ -66,6 +66,7 @@ export const Board = () => {
       <Group mt="lg" justify="center">
         <Seed seed={game.seed} />
       </Group>
+      <Text mt="xs">Attempt #{game.seedInfo.attempts}</Text>
     </div>
   );
 };
