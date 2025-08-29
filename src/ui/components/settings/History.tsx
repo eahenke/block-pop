@@ -54,9 +54,8 @@ export const History = ({ onSelect }: HistoryProps) => {
       <ul className="menu-list">
         {items.map(item => {
           return (
-            <li>
+            <li key={item.seed}>
               <HistoryItem
-                key={item.seed}
                 title={item.seed}
                 subtitle={`Last played: ${item.lastPlayed}`}
                 onClick={() => onSelect(item)}

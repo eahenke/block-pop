@@ -55,7 +55,6 @@ export const useSeedHistory = () => {
 
   useEffect(() => {
     const handleLocalStorageChange = (event: StorageEvent) => {
-      console.log('Storage change', event.storageArea, event.key);
       if (event.storageArea === localStorage && event.key === SEED_INFO_KEY) {
         setHist(getSeedHistory() || {});
       }
