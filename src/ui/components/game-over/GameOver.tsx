@@ -21,7 +21,7 @@ export const GameOver = () => {
 
   return (
     <Box mt="md">
-      <Text size="xl">Game Over!</Text>
+      {/* <Text size="xl">Game Over!</Text> */}
       <Group justify="space-around" mt="md">
         <Button size="lg" variant="filled" onClick={handleRetry}>
           Retry
@@ -31,5 +31,20 @@ export const GameOver = () => {
         </Button>
       </Group>
     </Box>
+  );
+};
+
+export const GameOverBanner = () => {
+  const { game } = useGame();
+  const isGameOver = game.status === 'DONE';
+
+  if (!isGameOver) {
+    return null;
+  }
+
+  return (
+    <div className="game-over-banner">
+      <Text size="xl">Game Over!</Text>
+    </div>
   );
 };

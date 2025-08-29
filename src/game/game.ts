@@ -17,7 +17,7 @@ import {
   getValidNeighbors,
   shiftLeft,
 } from './matrix';
-import { getLevelGoal, score } from './score';
+import { bonusScore, getLevelGoal, score } from './score';
 import { getHighScore } from './high-score';
 
 const generateTileValue = (rng: Rng) => {
@@ -164,10 +164,21 @@ const handleEndOfLevel = (game: GameType): GameType => {
     };
   } else {
     // Game over
-    const seedInfo = updateSeedInfo(game);
+    const bonus = bonusScore(TOTAL_BLOCKS - game.level.blocks);
+    const updatedLevel: Level = {
+      ...game.level,
+      score: game.level.score + bonus,
+    };
+    const updatedGame = {
+      ...game,
+      score: game.score + bonus,
+      level: updatedLevel,
+    };
+
+    const seedInfo = updateSeedInfo(updatedGame);
 
     return {
-      ...game,
+      ...updatedGame,
       seedInfo,
       status: 'DONE',
     };

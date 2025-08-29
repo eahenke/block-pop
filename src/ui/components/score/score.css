@@ -2,3 +2,8 @@
   color: green;
   font-weight: bold;
 }
+
+.score-bonus {
+  color: var(--mantine-color-cyan-5);
+  font-weight: bold;
+}
