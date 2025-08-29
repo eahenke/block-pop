@@ -1,0 +1,11 @@
+.history-item {
+  border-bottom: 1px solid gray;
+  padding: 0;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.stats-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+}

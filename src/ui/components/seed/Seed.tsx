@@ -4,13 +4,14 @@ import { MdContentCopy } from 'react-icons/md';
 
 type SeedProps = {
   seed: string;
+  title?: string;
 };
 
 const copyToClipboard = async (text: string) => {
   await navigator.clipboard.writeText(text);
 };
 
-export const Seed = ({ seed }: SeedProps) => {
+export const Seed = ({ seed, title = 'Current seed:' }: SeedProps) => {
   const handleCopy = async () => {
     try {
       await copyToClipboard(seed);
@@ -27,7 +28,9 @@ export const Seed = ({ seed }: SeedProps) => {
 
   return (
     <Group component="span" align="center">
-      <Text component="span">Current seed: {seed}</Text>
+      <Text component="span">
+        {title} {seed}
+      </Text>
       <ActionIcon
         variant="transparent"
         color="text"

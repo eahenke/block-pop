@@ -1,6 +1,16 @@
 import type { Coord, SeedHistory, SeedInfo } from '../game/types';
 
-const SEED_INFO_KEY = 'seedInfo';
+export const SEED_INFO_KEY = 'seedInfo';
+
+const fireEvent = () => {
+  const event = new StorageEvent('storage', {
+    key: SEED_INFO_KEY,
+    url: window.location.href,
+    storageArea: localStorage,
+  });
+
+  window.dispatchEvent(event);
+};
 
 const serializeMoves = (moves: Coord[]): string => {
   return moves.flat().join('');
@@ -34,7 +44,7 @@ const seedInfoReplacer = (key: string, value: any) => {
   return value;
 };
 
-const getSeedHistory = (): SeedHistory | null => {
+export const getSeedHistory = (): SeedHistory | null => {
   try {
     const seedHistoryRaw = localStorage.getItem(SEED_INFO_KEY);
     if (!seedHistoryRaw) return null;
@@ -76,4 +86,22 @@ export const saveSeedInfo = (seedInfo: SeedInfo): void => {
       seedInfoReplacer
     )
   );
+  fireEvent();
+};
+
+export const deleteSeedInfo = (seed: string): void => {
+  const seedHistory = getSeedHistory();
+  if (!seedHistory) return;
+
+  const newSeedHistory = {
+    ...seedHistory,
+  };
+
+  delete newSeedHistory[seed];
+
+  localStorage.setItem(
+    SEED_INFO_KEY,
+    JSON.stringify(newSeedHistory, seedInfoReplacer)
+  );
+  fireEvent();
 };

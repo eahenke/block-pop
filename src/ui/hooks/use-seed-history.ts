@@ -1,10 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useGame } from './use-game';
-import { saveSeedInfo } from '../../storage';
+import {
+  deleteSeedInfo,
+  getSeedHistory,
+  saveSeedInfo,
+  SEED_INFO_KEY,
+} from '../../storage';
 import { isQuotaExceededError } from '../../storage/utils';
 import { notifications } from '@mantine/notifications';
+import type { SeedHistory } from '../../game/types';
 
-export const useSeedHistory = () => {
+export const useSaveSeedHistory = () => {
   const { game } = useGame();
   const { status, mode } = game;
 
@@ -41,4 +47,29 @@ export const useSeedHistory = () => {
       }
     }
   }, [status]);
+};
+
+export const useSeedHistory = () => {
+  const seedHistory = getSeedHistory() || {};
+  const [hist, setHist] = useState<SeedHistory>(seedHistory);
+
+  useEffect(() => {
+    const handleLocalStorageChange = (event: StorageEvent) => {
+      console.log('Storage change', event.storageArea, event.key);
+      if (event.storageArea === localStorage && event.key === SEED_INFO_KEY) {
+        setHist(getSeedHistory() || {});
+      }
+    };
+
+    window.addEventListener('storage', handleLocalStorageChange, false);
+
+    return () => {
+      window.removeEventListener('storage', handleLocalStorageChange, false);
+    };
+  }, []);
+
+  return {
+    seedHistory: hist,
+    deleteSeedInfo,
+  };
 };

@@ -16,10 +16,10 @@ import { ActionIcon } from '@mantine/core';
 import { GameOver } from '../game-over';
 import { useGame } from '../../hooks/use-game';
 import type { ViewOptions } from '../../../game/types';
-import { useSeedHistory } from '../../hooks/use-seed-history';
+import { useSaveSeedHistory } from '../../hooks/use-seed-history';
 
 export const Game = () => {
-  useSeedHistory();
+  useSaveSeedHistory();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { setColorScheme, colorScheme } = useMantineColorScheme();
   const { setViewOptions, game, restart } = useGame();
