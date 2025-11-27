@@ -1,4 +1,5 @@
 import { ActionIcon, Modal as MantineModal } from '@mantine/core';
+import type { Ref } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 
 const noop = () => {};
@@ -9,12 +10,14 @@ export const Modal = ({
   title,
   onBack,
   children,
+  ref,
 }: {
   title: string;
   opened: boolean;
   onClose?: () => void;
   onBack?: () => void;
   children: React.ReactNode;
+  ref?: Ref<HTMLDivElement>;
 }) => {
   return (
     <MantineModal.Root
@@ -23,7 +26,7 @@ export const Modal = ({
       fullScreen={true}
     >
       <MantineModal.Overlay />
-      <MantineModal.Content>
+      <MantineModal.Content ref={ref}>
         <MantineModal.Header>
           {onBack ? (
             <ActionIcon color="text" variant="transparent" onClick={onBack}>

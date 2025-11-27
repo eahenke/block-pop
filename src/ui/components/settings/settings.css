@@ -5,7 +5,17 @@
   width: 100%;
 }
 
+.history-grid {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+}
+
 .stats-list {
   display: grid;
   grid-template-columns: max-content 1fr;
+}
+
+.history-score {
+  color: green;
+  font-weight: bold;
 }

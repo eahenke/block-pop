@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Group } from '@mantine/core';
 import { MdEdit, MdEqualizer, MdShuffle } from 'react-icons/md';
 
@@ -12,6 +12,7 @@ import './settings.css';
 import { Stats } from './Stats';
 import { NewSeed } from './NewSeed';
 import { EnterSeed } from './EnterSeed';
+import { saveScroll } from '../../../storage/misc';
 
 type SettingsProps = {
   open: boolean;
@@ -36,10 +37,19 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
   const { game } = useGame();
   const [section, setSection] = useState<SettingsSections>('settings');
   const [statSeed, setStatSeed] = useState<SeedInfo | null>(null);
+  const scrollableRef = useRef(null);
   usePushState();
+
+  useEffect(() => {
+    // Unset scroll on dismount
+    return () => {
+      saveScroll(0);
+    };
+  }, []);
 
   const toMainSettings = () => {
     setSection('settings');
+    saveScroll(0);
   };
 
   const handleBack = useCallback(() => {
@@ -68,6 +78,7 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
       opened={open}
       onClose={handleClose}
       onBack={section !== 'settings' ? handleBack : undefined}
+      ref={scrollableRef}
     >
       {section === 'settings' ? (
         <>
@@ -101,6 +112,7 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
       {section === 'enter' ? <EnterSeed onDone={handleClose} /> : null}
       {section === 'history' ? (
         <History
+          scrollableRef={scrollableRef}
           onSelect={seedInfo => {
             setStatSeed(seedInfo);
             setSection('stats');
