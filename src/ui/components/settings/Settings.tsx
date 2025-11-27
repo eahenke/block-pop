@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Group } from '@mantine/core';
-import { MdEdit, MdEqualizer, MdShuffle } from 'react-icons/md';
+import { MdEdit, MdEqualizer, MdPalette, MdShuffle } from 'react-icons/md';
 
 import { useGame } from '../../hooks/use-game';
 import { Menu, Modal } from '../common';
@@ -13,13 +13,20 @@ import { Stats } from './Stats';
 import { NewSeed } from './NewSeed';
 import { EnterSeed } from './EnterSeed';
 import { saveScroll } from '../../../storage/misc';
+import { Palette } from './Palette';
 
 type SettingsProps = {
   open: boolean;
   onClose: () => void;
 };
 
-type SettingsSections = 'settings' | 'new' | 'enter' | 'history' | 'stats';
+type SettingsSections =
+  | 'settings'
+  | 'new'
+  | 'enter'
+  | 'history'
+  | 'stats'
+  | 'palette';
 
 const getTitle = (section: SettingsSections): string => {
   const titles: Record<SettingsSections, string> = {
@@ -28,6 +35,7 @@ const getTitle = (section: SettingsSections): string => {
     enter: 'Enter Seed',
     history: 'History',
     stats: 'Statistics',
+    palette: 'Palettes',
   };
 
   return titles[section];
@@ -103,6 +111,11 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
                   icon: <MdEqualizer size={24} />,
                   onClick: () => setSection('history'),
                 },
+                {
+                  title: 'Palettes',
+                  icon: <MdPalette size={24} />,
+                  onClick: () => setSection('palette'),
+                },
               ]}
             />
           </Box>
@@ -122,6 +135,7 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
       {section === 'stats' && statSeed ? (
         <Stats seedInfo={statSeed} onDone={handleClose} />
       ) : null}
+      {section === 'palette' ? <Palette onSelect={handleClose} /> : null}
     </Modal>
   );
 };

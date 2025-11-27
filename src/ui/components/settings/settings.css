@@ -19,3 +19,8 @@
   color: green;
   font-weight: bold;
 }
+
+.tile-preview-container {
+  display: grid;
+  grid-template-columns: 15px 15px;
+}

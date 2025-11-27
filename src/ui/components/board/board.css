@@ -1,10 +1,35 @@
 :root {
   --block-spacing: 2px;
-  --block-color-1: #075368;
-  --block-color-2: #b98109;
-  --block-color-3: #a8509d;
-  --block-color-4: #99dbec;
-  --block-color-5: #f9eeb5;
+  --block-color-1: #fcc736;
+  --block-color-2: #3cd4c2;
+  --block-color-3: #6879e4;
+  --block-color-4: #a85ed5;
+  --block-color-5: #f57c58;
+}
+
+/* Palette Pre-sets */
+[data-palette='classic'] {
+  --block-color-1: #fcc736;
+  --block-color-2: #3cd4c2;
+  --block-color-3: #6879e4;
+  --block-color-4: #a85ed5;
+  --block-color-5: #f57c58;
+}
+
+[data-palette='monochrome'] {
+  --block-color-1: #302e2e;
+  --block-color-2: #4a4a4a;
+  --block-color-3: #838383;
+  --block-color-4: #b4b4b4;
+  --block-color-5: #d6d6d6;
+}
+
+[data-palette='preset-1'] {
+  --block-color-1: #54004f;
+  --block-color-2: #3d4a8b;
+  --block-color-3: #448da7;
+  --block-color-4: #ecbb6c;
+  --block-color-5: #efeb7e;
 }
 
 .board-wrapper {
