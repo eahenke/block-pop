@@ -7,7 +7,16 @@ export const getCurrentPalette = (): PaletteType | null => {
   const paletteRaw = localStorage.getItem(CURRENT_PALETTE_KEY);
   if (!paletteRaw) return null;
 
-  return JSON.parse(paletteRaw);
+  try {
+    return JSON.parse(paletteRaw);
+  } catch (e) {
+    // Backwards compat in case a string value is already stored
+    if (e instanceof Error) {
+      console.error('Error getting palette:', e.message);
+      return null;
+    }
+    throw e;
+  }
 };
 
 export const saveCurrentPalette = (val: PaletteType) => {
