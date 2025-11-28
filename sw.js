@@ -81,17 +81,17 @@ define(['./workbox-4da76df9'], (function (workbox) { 'use strict';
     "url": "apple-touch-icon-180x180.png",
     "revision": "9d9ded1d95901de07ddd1e7d3363621c"
   }, {
-    "url": "assets/index-BtrivpIx.js",
+    "url": "assets/index-CTJHuqXH.css",
     "revision": null
   }, {
-    "url": "assets/index-iqstel65.css",
+    "url": "assets/index-DxqSEVYZ.js",
     "revision": null
   }, {
     "url": "favicon.ico",
     "revision": "dc944ffdb734f0358cdb339d52ac230e"
   }, {
     "url": "index.html",
-    "revision": "7d4b741e8708ceedad21b57ecc5c028a"
+    "revision": "a729f4f9f9c8bb086ac871d9896c841b"
   }, {
     "url": "logo.png",
     "revision": "426acec02ed995f6b5a42cafa532e59f"
