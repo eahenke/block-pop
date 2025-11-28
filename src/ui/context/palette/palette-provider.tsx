@@ -1,35 +1,42 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import React, { useState, type ReactNode } from 'react';
 
 import { PaletteContext } from './palette-context';
-import { getCurrentPalette, savePalette } from '../../../storage/palette';
-
-const defaultInitialPalette = 'classic';
+import {
+  getCurrentPalette,
+  saveCurrentPalette,
+} from '../../../storage/palette';
+import type { PaletteType } from '../../../palette/types';
+import { PRESET_PALETTES } from '../../../palette/contants';
 
 // INIT
-const savedPalette = getCurrentPalette();
+const savedPalette = getCurrentPalette() || PRESET_PALETTES[0];
+
+const toCssVars = (palette: PaletteType | null): React.CSSProperties => {
+  if (!palette) return {};
+  return {
+    '--block-color-1': palette.block1 || '',
+    '--block-color-2': palette.block2 || '',
+    '--block-color-3': palette.block3 || '',
+    '--block-color-4': palette.block4 || '',
+    '--block-color-5': palette.block5 || '',
+  } as React.CSSProperties;
+};
 
 type PaletteSetterProps = {
-  palette: string;
+  palette: PaletteType;
   children: ReactNode;
 };
 
-export function PaletteSetter({ children, palette }: PaletteSetterProps) {
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const html = document.documentElement;
-      html.setAttribute('data-palette', palette);
-    }
-  }, [palette]);
-
-  return <div>{children}</div>;
+export function PaletteWrapper({ children, palette }: PaletteSetterProps) {
+  return <div style={toCssVars(palette)}>{children}</div>;
 }
 
 export const PaletteProvider = ({ children }: { children: ReactNode }) => {
-  const [palette, setPalette] = useState(savedPalette || defaultInitialPalette);
+  const [palette, setPalette] = useState<PaletteType>(savedPalette);
 
-  const changePalette = (val: string) => {
+  const changePalette = (val: PaletteType) => {
     setPalette(val);
-    savePalette(val);
+    saveCurrentPalette(val);
   };
 
   const value = {
@@ -39,7 +46,7 @@ export const PaletteProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <PaletteContext.Provider value={value}>
-      <PaletteSetter palette={palette}>{children}</PaletteSetter>
+      <PaletteWrapper palette={palette}>{children}</PaletteWrapper>
     </PaletteContext.Provider>
   );
 };

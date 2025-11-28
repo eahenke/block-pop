@@ -14,6 +14,8 @@ import { NewSeed } from './NewSeed';
 import { EnterSeed } from './EnterSeed';
 import { saveScroll } from '../../../storage/misc';
 import { Palette } from './Palette';
+import { PaletteEdit } from './PaletteEdit';
+import type { PaletteType } from '../../../palette/types';
 
 type SettingsProps = {
   open: boolean;
@@ -26,7 +28,8 @@ type SettingsSections =
   | 'enter'
   | 'history'
   | 'stats'
-  | 'palette';
+  | 'palette'
+  | 'paletteCustom';
 
 const getTitle = (section: SettingsSections): string => {
   const titles: Record<SettingsSections, string> = {
@@ -36,6 +39,7 @@ const getTitle = (section: SettingsSections): string => {
     history: 'History',
     stats: 'Statistics',
     palette: 'Palettes',
+    paletteCustom: 'Custom Palette',
   };
 
   return titles[section];
@@ -45,6 +49,7 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
   const { game } = useGame();
   const [section, setSection] = useState<SettingsSections>('settings');
   const [statSeed, setStatSeed] = useState<SeedInfo | null>(null);
+  const [customPalette, setCustomPalette] = useState<PaletteType | null>(null);
   const scrollableRef = useRef(null);
   usePushState();
 
@@ -66,6 +71,9 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
     } else if (section === 'stats') {
       setSection('history');
       setStatSeed(null);
+    } else if (section === 'paletteCustom') {
+      setSection('palette');
+      setCustomPalette(null);
     } else {
       toMainSettings();
     }
@@ -135,7 +143,21 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
       {section === 'stats' && statSeed ? (
         <Stats seedInfo={statSeed} onDone={handleClose} />
       ) : null}
-      {section === 'palette' ? <Palette onSelect={handleClose} /> : null}
+      {section === 'palette' ? (
+        <Palette
+          onSelect={handleClose}
+          onAdd={() => {
+            setSection('paletteCustom');
+          }}
+          onEdit={currentPalette => {
+            setCustomPalette(currentPalette);
+            setSection('paletteCustom');
+          }}
+        />
+      ) : null}
+      {section === 'paletteCustom' ? (
+        <PaletteEdit palette={customPalette} onDone={handleBack} />
+      ) : null}
     </Modal>
   );
 };
