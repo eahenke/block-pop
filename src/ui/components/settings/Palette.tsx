@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Button, Group, Text } from '@mantine/core';
+import { ActionIcon, Box, Button, Group, Text, TextInput } from '@mantine/core';
 import { usePushState } from '../../hooks/use-back-button';
 import { usePalette } from '../../hooks/use-palette';
 import {
@@ -7,10 +7,14 @@ import {
   MdDelete,
   MdEdit,
   MdOutlineCircle,
+  MdOutlineSearch,
 } from 'react-icons/md';
 import type { PaletteType } from '../../../palette/types';
 import { PRESET_PALETTES } from '../../../palette/contants';
 import { PaletteWrapper } from '../../context/palette/palette-provider';
+import { useState } from 'react';
+
+const ITEM_SEARCH_MINIMUM = 6;
 
 const SelectedIcon = ({ selected }: { selected: boolean }) => {
   return selected ? <MdCircle /> : <MdOutlineCircle />;
@@ -86,6 +90,7 @@ export const Palette = ({ onSelect, onAdd, onEdit }: PaletteProps) => {
     deletePalette,
     palette: currentPalette,
   } = usePalette();
+  const [filter, setFilter] = useState('');
   usePushState();
 
   const onSelectItem = (val: PaletteType) => {
@@ -97,14 +102,36 @@ export const Palette = ({ onSelect, onAdd, onEdit }: PaletteProps) => {
     return a.name.localeCompare(b.name);
   });
 
+  const filterPalettes = (palette: PaletteType) => {
+    if (!filter) return true;
+
+    return palette.name.toLowerCase().startsWith(filter.toLowerCase());
+  };
+
+  const totalItemAmount = PRESET_PALETTES.length + customPalettes.length;
+
+  const filteredPresets = PRESET_PALETTES.filter(filterPalettes);
+  const filteredCustom = sortedCustomPalettes.filter(filterPalettes);
+
   return (
     <Box mt="md">
+      <Box mb="md">
+        {totalItemAmount > ITEM_SEARCH_MINIMUM ? (
+          <TextInput
+            leftSection={<MdOutlineSearch />}
+            label="Palette Name"
+            name="filter"
+            value={filter}
+            onChange={e => setFilter(e.currentTarget.value)}
+          />
+        ) : null}
+      </Box>
       <Box>
         <Text size="xl" ta="center" mb="md">
           Presets
         </Text>
         <ul className="menu-list">
-          {PRESET_PALETTES.map(item => {
+          {filteredPresets.map(item => {
             return (
               <li key={item.name}>
                 <PaletteItem
@@ -131,7 +158,7 @@ export const Palette = ({ onSelect, onAdd, onEdit }: PaletteProps) => {
           </ActionIcon>
         </Group>
         <ul className="menu-list">
-          {sortedCustomPalettes.map(item => {
+          {filteredCustom.map(item => {
             return (
               <li key={item.name}>
                 <PaletteItem

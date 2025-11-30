@@ -1,5 +1,5 @@
-import { ActionIcon, Box, Button, Group, Text } from '@mantine/core';
-import { MdDelete } from 'react-icons/md';
+import { ActionIcon, Box, Button, Group, Text, TextInput } from '@mantine/core';
+import { MdDelete, MdOutlineSearch } from 'react-icons/md';
 import { useSeedHistory } from '../../hooks/use-seed-history';
 import type { SeedInfo } from '../../../game/types';
 import { useGame } from '../../hooks/use-game';
@@ -7,6 +7,8 @@ import { usePushState } from '../../hooks/use-back-button';
 import { useEffect, useState, type RefObject } from 'react';
 import { SortButton } from '../common/sort-button';
 import { getScroll, saveScroll } from '../../../storage/misc';
+
+const ITEM_SEARCH_MINIMUM = 7;
 
 type HistoryItemProps = {
   title: string;
@@ -59,6 +61,7 @@ export const History = ({ onSelect, scrollableRef }: HistoryProps) => {
   const { seedHistory, deleteSeedInfo } = useSeedHistory();
   const [sortProperty, setSortProperty] = useState<SortProperty>('date');
   const [asc, setAsc] = useState(false);
+  const [filter, setFilter] = useState('');
   usePushState();
 
   useEffect(() => {
@@ -75,6 +78,15 @@ export const History = ({ onSelect, scrollableRef }: HistoryProps) => {
     onSelect(seedInfo);
   };
 
+  const handleSortProperty = (prop: SortProperty) => {
+    if (prop !== sortProperty) {
+      setAsc(false);
+      setSortProperty(prop);
+    } else {
+      setAsc(curr => !curr);
+    }
+  };
+
   const items = Object.values(seedHistory).sort((a, b) => {
     const directionMultiplier = asc ? -1 : 1;
 
@@ -88,17 +100,25 @@ export const History = ({ onSelect, scrollableRef }: HistoryProps) => {
     return b.lastPlayed.localeCompare(a.lastPlayed) * directionMultiplier;
   });
 
-  const handleSortProperty = (prop: SortProperty) => {
-    if (prop !== sortProperty) {
-      setAsc(false);
-      setSortProperty(prop);
-    } else {
-      setAsc(curr => !curr);
-    }
-  };
+  const filteredItems = items.filter(item => {
+    if (!filter) return true;
+
+    return item.seed.toLowerCase().startsWith(filter.toLowerCase());
+  });
 
   return (
     <Box mt="md">
+      <Box mb="md">
+        {items.length > ITEM_SEARCH_MINIMUM ? (
+          <TextInput
+            leftSection={<MdOutlineSearch />}
+            label="Seed Name"
+            name="filter"
+            value={filter}
+            onChange={e => setFilter(e.currentTarget.value)}
+          />
+        ) : null}
+      </Box>
       <Box className="history-grid">
         <Group justify="space-around">
           <SortButton
@@ -120,7 +140,7 @@ export const History = ({ onSelect, scrollableRef }: HistoryProps) => {
         </Group>
       </Box>
       <ul className="menu-list">
-        {items.map(item => {
+        {filteredItems.map(item => {
           return (
             <li key={item.seed}>
               <HistoryItem
