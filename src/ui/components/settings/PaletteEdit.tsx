@@ -1,4 +1,11 @@
-import { Box, Button, ColorInput, Text, TextInput } from '@mantine/core';
+import {
+  Box,
+  Button,
+  ColorInput,
+  ColorSwatch,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { usePushState } from '../../hooks/use-back-button';
 import { useState } from 'react';
 import type { PaletteType } from '../../../palette/types';
@@ -89,6 +96,8 @@ export const PaletteEdit = ({ palette, onDone }: PaletteEditProps) => {
               onChangeEnd={val => {
                 handleChange(blockProp, val);
               }}
+              withPreview={false}
+              rightSection={<ColorSwatch color={currentPalette[blockProp]} />}
               required
             />
           );

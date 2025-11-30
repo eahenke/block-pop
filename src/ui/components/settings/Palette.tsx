@@ -18,7 +18,7 @@ const SelectedIcon = ({ selected }: { selected: boolean }) => {
 
 const blocks = [1, 2, 3, 4, 5];
 
-const PalettePreview = ({ palette }: { palette: PaletteType }) => {
+const PaletteThumbnail = ({ palette }: { palette: PaletteType }) => {
   return (
     <PaletteWrapper palette={palette}>
       <div className="tile-preview-container">
@@ -53,7 +53,7 @@ const PaletteItem = ({
       <Button variant="text" onClick={onClick} size="xl">
         <Group>
           <SelectedIcon selected={currentPalette.name === palette.name} />
-          <PalettePreview palette={palette} />
+          <PaletteThumbnail palette={palette} />
           <Text size="xl">{palette.name}</Text>
         </Group>
       </Button>
