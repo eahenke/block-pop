@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import {
   MdOutlineSettings,
-  MdOutlinePalette,
   MdOutlineHighlight,
   MdOutlineAccessibility,
   MdRefresh,
+  MdOutlineNightlight,
+  MdOutlineWbSunny,
 } from 'react-icons/md';
 import { useMantineColorScheme } from '@mantine/core';
 import { Board } from '../board';
@@ -67,7 +68,11 @@ export const Game = () => {
             onClick={toggleColorScheme}
             aria-label="Theme"
           >
-            <MdOutlinePalette size={24} />
+            {colorScheme === 'light' ? (
+              <MdOutlineNightlight size={24} />
+            ) : (
+              <MdOutlineWbSunny size={24} />
+            )}
           </ActionIcon>
           <ActionIcon
             color="text"
