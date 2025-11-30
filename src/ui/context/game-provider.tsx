@@ -10,12 +10,13 @@ import {
   saveViewOptions,
 } from '../../storage/game-meta';
 import { getSeedInfo } from '../../storage';
+import { getDeepLinkSeed } from '../utils/url';
 
 const defaultInitialSeed = '1234567890';
 
 // INIT
 const initialViewOptions = getViewOptions();
-const initialSeed = getCurrentSeed() || defaultInitialSeed;
+const initialSeed = getDeepLinkSeed() || getCurrentSeed() || defaultInitialSeed;
 const seedInfo = getSeedInfo(initialSeed);
 
 const initialState = initGame({
