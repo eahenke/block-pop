@@ -45,11 +45,18 @@ export type HighScore = {
   blocksRemaining: number;
 };
 
+export type Attempt = {
+  number: number;
+  score: number;
+  date: string; // ISO Date
+};
+
 export type SeedInfo = {
   seed: string;
   attempts: number;
   lastPlayed: string; // ISO date
   highScore: HighScore | null;
+  history: Attempt[];
 };
 
 export type SeedHistory = Record<string, SeedInfo>;

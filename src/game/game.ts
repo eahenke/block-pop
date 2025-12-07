@@ -84,19 +84,40 @@ export const initGame = ({
           lastPlayed: new Date().toISOString(),
           attempts: 1,
           highScore: null,
+          history: [],
         },
   };
 };
 
-const updateSeedInfo = (game: GameType): SeedInfo => {
-  const highScoreRecord = getHighScore(game);
+const addAtempt = (game: GameType): SeedInfo => {
+  const updatedSeedInfo = {
+    ...game.seedInfo,
+  };
 
+  const existingAttempt = updatedSeedInfo.history.find(
+    attempt => attempt.number === updatedSeedInfo.attempts
+  );
+  if (!existingAttempt) {
+    updatedSeedInfo.history.push({
+      number: game.seedInfo.attempts,
+      score: game.score,
+      date: new Date().toISOString(),
+    });
+  }
+
+  return updatedSeedInfo;
+};
+
+const updateSeedInfo = (game: GameType): SeedInfo => {
+  const updatedSeedInfo = addAtempt(game);
+  const highScoreRecord = getHighScore(game);
   const highScoreValue = highScoreRecord?.score || 0;
+
   const updatedRecord: SeedInfo =
     game.score <= highScoreValue
-      ? game.seedInfo
+      ? updatedSeedInfo
       : {
-          ...game.seedInfo,
+          ...updatedSeedInfo,
           highScore: {
             moves: game.level.moves,
             blocksRemaining: TOTAL_BLOCKS - game.level.blocks,

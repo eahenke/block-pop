@@ -31,8 +31,17 @@ const deserializeMoves = (moveStr: string): Coord[] => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const seedInfoReviver = (key: string, value: any) => {
-  if (key === 'moves' && typeof value === 'string')
+  if (key === 'moves' && typeof value === 'string') {
     return deserializeMoves(value);
+  }
+
+  // Backwards compat for old seeds without stored history
+  if (value.seed && value.seed === key && !value.history) {
+    return {
+      ...value,
+      history: [],
+    };
+  }
 
   return value;
 };

@@ -1,9 +1,59 @@
-import { Box, Button, Group, Text } from '@mantine/core';
+import { type ReactNode } from 'react';
+import { Box, Button, Collapse, Group, Text } from '@mantine/core';
+import cx from 'classnames';
 import type { SeedInfo } from '../../../game/types';
 import { Seed } from '../seed';
 import { useGame } from '../../hooks/use-game';
-import type { ReactNode } from 'react';
+
 import { usePushState } from '../../hooks/use-back-button';
+import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
+import { useDisclosure } from '@mantine/hooks';
+
+type AttemptHistoryProps = {
+  seedInfo: SeedInfo;
+};
+
+const AttemptHistory = ({ seedInfo }: AttemptHistoryProps) => {
+  const [opened, { toggle }] = useDisclosure(false);
+
+  return (
+    <section>
+      <Button
+        variant="text"
+        onClick={toggle}
+        rightSection={
+          opened ? <MdArrowDropUp size={24} /> : <MdArrowDropDown size={24} />
+        }
+        fullWidth={true}
+        size="lg"
+      >
+        <Text size="lg">Attempt History</Text>
+      </Button>
+      <Collapse in={opened}>
+        <ul className="menu-list">
+          {seedInfo.history.map(attempt => (
+            <li key={attempt.number}>
+              <Box mb="md">
+                <Group justify="space-between">
+                  <Text>Attempt {attempt.number}:</Text>
+                  <Text
+                    className={cx({
+                      'history-score':
+                        attempt.number === seedInfo.highScore?.attempt,
+                    })}
+                  >
+                    {attempt.score}
+                  </Text>
+                </Group>
+                <Text size="xs">{attempt.date}</Text>
+              </Box>
+            </li>
+          ))}
+        </ul>
+      </Collapse>
+    </section>
+  );
+};
 
 type StatItemProps = {
   title: ReactNode;
@@ -53,6 +103,9 @@ export const Stats = ({ seedInfo, onDone }: StatsProps) => {
             value={highScore.attempt}
           />
         </>
+      ) : null}
+      {seedInfo.history.length > 0 ? (
+        <AttemptHistory seedInfo={seedInfo} />
       ) : null}
       <Button size="lg" fullWidth={true} onClick={handleReplay} mt="xl">
         Replay
