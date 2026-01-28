@@ -1,4 +1,4 @@
-import { useReducer, type ReactNode } from 'react';
+import { useEffect, useReducer, useState, type ReactNode } from 'react';
 import { gameReducer, initGame } from '../../game/game';
 import { ACTIONS } from '../../game/actions';
 import { GameContext } from './game-context';
@@ -11,23 +11,32 @@ import {
 } from '../../storage/game-meta';
 import { getSeedInfo } from '../../storage';
 import { getDeepLinkSeed } from '../utils/url';
+import { Loading } from '../components/common';
 
 const defaultInitialSeed = '1234567890';
 
 // INIT
 const initialViewOptions = getViewOptions();
 const initialSeed = getDeepLinkSeed() || getCurrentSeed() || defaultInitialSeed;
-const seedInfo = getSeedInfo(initialSeed);
 
 const initialState = initGame({
   seed: initialSeed,
   viewOptions: initialViewOptions || undefined,
-  seedInfo,
+  seedInfo: null,
   reset: true,
 });
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
+  const [loading, setLoading] = useState(true);
   const [game, dispatch] = useReducer(gameReducer, initialState);
+
+  useEffect(() => {
+    async function loadInitial(seed: string) {
+      await init(seed, true);
+      setLoading(false);
+    }
+    loadInitial(initialSeed);
+  }, []);
 
   const restart = () => {
     dispatch({
@@ -51,10 +60,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const init = (seed: string, reset = false) => {
+  const init = async (seed: string, reset = false) => {
     const currentSeed = getCurrentSeed();
     const viewOptions = getViewOptions();
-    const seedInfo = getSeedInfo(seed);
+    const seedInfo = await getSeedInfo(seed);
 
     if (currentSeed !== seed) {
       saveCurrentSeed(seed);
@@ -88,5 +97,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setViewOptions,
   };
 
-  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
+  return (
+    <GameContext.Provider value={value}>
+      {loading ? <Loading visible /> : children}
+    </GameContext.Provider>
+  );
 };

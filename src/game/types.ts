@@ -43,19 +43,21 @@ export type HighScore = {
   score: number;
   moves: Coord[];
   blocksRemaining: number;
+  date: string; // ISO Date
 };
 
 export type Attempt = {
   number: number;
   score: number;
   date: string; // ISO Date
+  blocksRemaining: number;
 };
 
 export type SeedInfo = {
   seed: string;
   attempts: number;
   lastPlayed: string; // ISO date
-  highScore: HighScore | null;
+  highScore: HighScore;
   history: Attempt[];
 };
 

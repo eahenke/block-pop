@@ -5,14 +5,18 @@ import { Game } from './ui/components/game/Game';
 import { GameProvider } from './ui/context/game-provider';
 import { theme } from './ui/theme';
 import { PaletteProvider } from './ui/context/palette/palette-provider';
+import { useDbMigration } from './ui/hooks/use-db-migration';
+import { Loading } from './ui/components/common';
 
 function App() {
+  const { loading } = useDbMigration();
+
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Notifications />
       <GameProvider>
         <PaletteProvider>
-          <Game />
+          {loading ? <Loading visible message="Migrating data..." /> : <Game />}
         </PaletteProvider>
       </GameProvider>
     </MantineProvider>

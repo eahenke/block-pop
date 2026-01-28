@@ -7,6 +7,7 @@ import { usePushState } from '../../hooks/use-back-button';
 import { useEffect, useState, type RefObject } from 'react';
 import { SortButton } from '../common/sort-button';
 import { getScroll, saveScroll } from '../../../storage/misc';
+import { Loading } from '../common';
 
 const ITEM_SEARCH_MINIMUM = 7;
 
@@ -70,6 +71,10 @@ export const History = ({ onSelect, scrollableRef }: HistoryProps) => {
       scrollableRef.current.scrollTop = savedScrollPos;
     }
   }, [scrollableRef]);
+
+  if (!seedHistory) {
+    return <Loading visible />;
+  }
 
   const onSelectItem = (seedInfo: SeedInfo) => {
     if (scrollableRef.current) {

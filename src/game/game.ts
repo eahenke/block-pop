@@ -83,7 +83,13 @@ export const initGame = ({
           seed,
           lastPlayed: new Date().toISOString(),
           attempts: 1,
-          highScore: null,
+          highScore: {
+            score: 0,
+            date: new Date().toISOString(),
+            blocksRemaining: TOTAL_BLOCKS,
+            attempt: 1,
+            moves: [],
+          },
           history: [],
         },
   };
@@ -102,6 +108,7 @@ const addAtempt = (game: GameType): SeedInfo => {
       number: game.seedInfo.attempts,
       score: game.score,
       date: new Date().toISOString(),
+      blocksRemaining: TOTAL_BLOCKS - game.level.blocks,
     });
   }
 
@@ -123,6 +130,7 @@ const updateSeedInfo = (game: GameType): SeedInfo => {
             blocksRemaining: TOTAL_BLOCKS - game.level.blocks,
             attempt: game.seedInfo.attempts,
             score: game.score,
+            date: new Date().toISOString(),
           },
         };
 

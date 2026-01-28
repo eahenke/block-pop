@@ -1,13 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import { analyzer } from 'vite-bundle-analyzer';
+// import { analyzer } from 'vite-bundle-analyzer';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    analyzer(),
+    // analyzer(),
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
@@ -30,9 +30,9 @@ export default defineConfig({
           },
         ],
       },
-      devOptions: {
-        enabled: true,
-      },
+      // devOptions: {
+      //   enabled: true,
+      // },
     }),
   ],
   base: 'block-pop',
