@@ -17,7 +17,7 @@ const getScoreClass = (game: GameType, highScore: number) => {
 
 export const Score = () => {
   const [showMove, setShowMoved] = useState(false);
-  const timerRef = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { game } = useGame();
   const { score, lastMove, status } = game;
 
