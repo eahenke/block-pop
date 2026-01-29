@@ -1,7 +1,6 @@
 import { ActionIcon, Box, Button, Group, Text, TextInput } from '@mantine/core';
 import { MdDelete, MdOutlineSearch } from 'react-icons/md';
 import { useSeedHistory } from '../../hooks/use-seed-history';
-import type { SeedInfo } from '../../../game/types';
 import { useGame } from '../../hooks/use-game';
 import { usePushState } from '../../hooks/use-back-button';
 import { useEffect, useState, type RefObject } from 'react';
@@ -53,7 +52,7 @@ const HistoryItem = ({
 type SortProperty = 'date' | 'score';
 
 type HistoryProps = {
-  onSelect: (seedInfo: SeedInfo) => void;
+  onSelect: (seed: string) => void;
   scrollableRef: RefObject<HTMLElement | null>;
 };
 
@@ -76,11 +75,11 @@ export const History = ({ onSelect, scrollableRef }: HistoryProps) => {
     return <Loading visible />;
   }
 
-  const onSelectItem = (seedInfo: SeedInfo) => {
+  const onSelectItem = (seed: string) => {
     if (scrollableRef.current) {
       saveScroll(scrollableRef.current.scrollTop);
     }
-    onSelect(seedInfo);
+    onSelect(seed);
   };
 
   const handleSortProperty = (prop: SortProperty) => {
@@ -152,7 +151,7 @@ export const History = ({ onSelect, scrollableRef }: HistoryProps) => {
                 title={item.seed}
                 highscore={item.highScore?.score}
                 subtitle={`Last played: ${item.lastPlayed}`}
-                onClick={() => onSelectItem(item)}
+                onClick={() => onSelectItem(item.seed)}
                 onDelete={
                   item.seed === game.seed
                     ? undefined

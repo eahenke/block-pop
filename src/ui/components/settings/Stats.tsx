@@ -8,6 +8,8 @@ import { useGame } from '../../hooks/use-game';
 import { usePushState } from '../../hooks/use-back-button';
 import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 import { useDisclosure } from '@mantine/hooks';
+import { useSeedInfo } from '../../hooks/use-seed-info';
+import { Loading } from '../common';
 
 type AttemptHistoryProps = {
   seedInfo: SeedInfo;
@@ -70,18 +72,23 @@ export const StatItem = ({ title, value }: StatItemProps) => {
 };
 
 type StatsProps = {
-  seedInfo: SeedInfo;
+  seed: string;
   onDone: () => void;
 };
 
-export const Stats = ({ seedInfo, onDone }: StatsProps) => {
+export const Stats = ({ seed, onDone }: StatsProps) => {
   const { init } = useGame();
+  const { seedInfo } = useSeedInfo(seed);
   usePushState();
 
   const handleReplay = () => {
-    init(seedInfo.seed, true);
+    init(seed, true);
     onDone();
   };
+
+  if (!seedInfo) {
+    return <Loading visible />;
+  }
 
   const highScore = seedInfo.highScore;
 

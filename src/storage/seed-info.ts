@@ -1,4 +1,10 @@
-import type { Attempt, Coord, SeedHistory, SeedInfo } from '../game/types';
+import type {
+  Attempt,
+  Coord,
+  SeedHistory,
+  SeedInfo,
+  SeedSummary,
+} from '../game/types';
 import { db, type StoredAttempt, type StoredSeedInfo } from './db';
 
 export const SEED_INFO_KEY = 'seedInfo';
@@ -39,12 +45,14 @@ const seedInfoReviver = (key: string, value: any) => {
   return value;
 };
 
-export const getSeedHistoryLegacy = (): SeedHistory | null => {
+type LegacySeedHistory = Record<string, SeedInfo>;
+
+export const getSeedHistoryLegacy = (): LegacySeedHistory | null => {
   try {
     const seedHistoryRaw = localStorage.getItem(SEED_INFO_KEY);
     if (!seedHistoryRaw) return null;
 
-    const seedHistory: SeedHistory = JSON.parse(
+    const seedHistory: LegacySeedHistory = JSON.parse(
       seedHistoryRaw,
       seedInfoReviver
     );
@@ -67,20 +75,26 @@ const toAttempt = (raw: StoredAttempt): Attempt => {
   };
 };
 
-const toSeedInfo = (
-  raw: StoredSeedInfo,
-  attempts: StoredAttempt[]
-): SeedInfo => {
+const toSeedSummary = (raw: StoredSeedInfo): SeedSummary => {
   return {
     ...raw,
     lastPlayed: raw.lastPlayed.toISOString(),
-    history: attempts.map(toAttempt),
     highScore: {
       ...raw.highScore,
       attempt: raw.highScore?.number || 0,
       moves: deserializeMoves(raw.highScore.moves),
       date: raw.highScore.date.toISOString(),
     },
+  };
+};
+
+const toSeedInfo = (
+  raw: StoredSeedInfo,
+  attempts: StoredAttempt[]
+): SeedInfo => {
+  return {
+    ...toSeedSummary(raw),
+    history: attempts.map(toAttempt),
   };
 };
 
@@ -119,29 +133,8 @@ const toStoredAttempt = (
 /* Operations */
 
 export const getSeedHistory = async (): Promise<SeedHistory> => {
-  // TODO: eventually remove seedInfo.history from SeedInfo and only fetch in seed stats screen
-  const seedInfos = await db.transaction(
-    'r',
-    db.seedInfo,
-    db.attempts,
-    async () => {
-      const storedSeedInfos = await db.seedInfo.toArray();
-      const seedKeys = storedSeedInfos.map(si => si.seed);
-      const histories = await db.attempts
-        .where('seed')
-        .anyOf(seedKeys)
-        .toArray();
-
-      const infos: SeedInfo[] = storedSeedInfos.map(si => {
-        const attempts = histories.filter(h => h.seed === si.seed);
-
-        return toSeedInfo(si, attempts);
-      });
-
-      return infos;
-    }
-  );
-
+  const storedSeedInfos = await db.seedInfo.toArray();
+  const seedInfos = storedSeedInfos.map(toSeedSummary);
   const seedHistory = seedInfos.reduce((accum, si) => {
     accum[si.seed] = si;
     return accum;
@@ -152,8 +145,21 @@ export const getSeedHistory = async (): Promise<SeedHistory> => {
 
 export const getSeedInfo = async (seed: string): Promise<SeedInfo | null> => {
   try {
-    const seedHistory = (await getSeedHistory()) || {};
-    return seedHistory[seed] || null;
+    const results = await db.transaction(
+      'r',
+      'seedInfo',
+      'attempts',
+      async () => {
+        const seedInfo = await db.seedInfo.get(seed);
+        if (!seedInfo) {
+          return null;
+        }
+        const attempts = await db.attempts.where('seed').equals(seed).toArray();
+
+        return toSeedInfo(seedInfo, attempts);
+      }
+    );
+    return results;
   } catch (e) {
     console.error('Error getting SeedInfo', e);
     return null;

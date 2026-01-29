@@ -6,7 +6,6 @@ import { useGame } from '../../hooks/use-game';
 import { Menu, Modal } from '../common';
 import { useBackButton, usePushState } from '../../hooks/use-back-button';
 import { Seed } from '../seed';
-import type { SeedInfo } from '../../../game/types';
 import { History } from './History';
 import './settings.css';
 import { Stats } from './Stats';
@@ -48,7 +47,7 @@ const getTitle = (section: SettingsSections): string => {
 export const Settings = ({ open, onClose }: SettingsProps) => {
   const { game } = useGame();
   const [section, setSection] = useState<SettingsSections>('settings');
-  const [statSeed, setStatSeed] = useState<SeedInfo | null>(null);
+  const [statSeed, setStatSeed] = useState<string | null>(null);
   const [customPalette, setCustomPalette] = useState<PaletteType | null>(null);
   const scrollableRef = useRef(null);
   usePushState();
@@ -134,14 +133,14 @@ export const Settings = ({ open, onClose }: SettingsProps) => {
       {section === 'history' ? (
         <History
           scrollableRef={scrollableRef}
-          onSelect={seedInfo => {
-            setStatSeed(seedInfo);
+          onSelect={seed => {
+            setStatSeed(seed);
             setSection('stats');
           }}
         />
       ) : null}
       {section === 'stats' && statSeed ? (
-        <Stats seedInfo={statSeed} onDone={handleClose} />
+        <Stats seed={statSeed} onDone={handleClose} />
       ) : null}
       {section === 'palette' ? (
         <Palette
