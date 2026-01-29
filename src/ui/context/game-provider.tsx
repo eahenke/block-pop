@@ -12,6 +12,7 @@ import {
 import { getSeedInfo } from '../../storage';
 import { getDeepLinkSeed } from '../utils/url';
 import { Loading } from '../components/common';
+import { tryPeristStorage } from '../../storage/storage-manager';
 
 const defaultInitialSeed = '1234567890';
 
@@ -32,6 +33,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     async function loadInitial(seed: string) {
+      // Fire and forget
+      tryPeristStorage();
       await init(seed, true);
       setLoading(false);
     }

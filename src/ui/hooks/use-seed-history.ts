@@ -3,6 +3,7 @@ import { useGame } from './use-game';
 import { deleteSeedInfo, getSeedHistory, saveSeedInfo } from '../../storage';
 import { notifications } from '@mantine/notifications';
 import { useDexieQuery } from './db';
+import { isQuotaExceededError } from '../../storage/utils';
 
 export const useSaveSeedHistory = () => {
   const { game } = useGame();
@@ -14,11 +15,21 @@ export const useSaveSeedHistory = () => {
         try {
           await saveSeedInfo(game.seedInfo);
         } catch (e) {
+          if (isQuotaExceededError(e)) {
+            notifications.show({
+              title: 'Save Failed',
+              message: 'Storage full. Try deleting some records from History',
+              autoClose: false,
+              color: 'red',
+            });
+            return;
+          }
           console.error('Failed to save', e);
-          // TODO: better, more specific error handling
+
+          // General fallback
           notifications.show({
             title: 'Save Failed',
-            message: `Failed to save: ${(e as Error).message || ''}`,
+            message: (e as Error).message || '',
             autoClose: false,
             color: 'red',
           });
