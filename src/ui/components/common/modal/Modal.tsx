@@ -1,4 +1,8 @@
-import { ActionIcon, Modal as MantineModal } from '@mantine/core';
+import {
+  ActionIcon,
+  Modal as MantineModal,
+  type TransitionOverride,
+} from '@mantine/core';
 import type { Ref } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 
@@ -11,6 +15,7 @@ export const Modal = ({
   onBack,
   children,
   ref,
+  transitionProps,
 }: {
   title: string;
   opened: boolean;
@@ -18,15 +23,17 @@ export const Modal = ({
   onBack?: () => void;
   children: React.ReactNode;
   ref?: Ref<HTMLDivElement>;
+  transitionProps?: TransitionOverride;
 }) => {
   return (
     <MantineModal.Root
       opened={opened}
       onClose={onClose || noop}
       fullScreen={true}
+      transitionProps={transitionProps}
     >
       <MantineModal.Overlay />
-      <MantineModal.Content ref={ref}>
+      <MantineModal.Content ref={ref} pos="relative">
         <MantineModal.Header>
           {onBack ? (
             <ActionIcon color="text" variant="transparent" onClick={onBack}>

@@ -7,6 +7,7 @@ import { theme } from './ui/theme';
 import { PaletteProvider } from './ui/context/palette/palette-provider';
 import { useDbMigration } from './ui/hooks/use-db-migration';
 import { Loading } from './ui/components/common';
+import { SettingsMenuProvider } from './ui/context/settings-menu';
 
 function App() {
   const { loading } = useDbMigration();
@@ -16,7 +17,13 @@ function App() {
       <Notifications />
       <GameProvider>
         <PaletteProvider>
-          {loading ? <Loading visible message="Migrating data..." /> : <Game />}
+          <SettingsMenuProvider>
+            {loading ? (
+              <Loading visible message="Migrating data..." />
+            ) : (
+              <Game />
+            )}
+          </SettingsMenuProvider>
         </PaletteProvider>
       </GameProvider>
     </MantineProvider>

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   MdOutlineSettings,
   MdOutlineHighlight,
@@ -11,17 +10,19 @@ import { useMantineColorScheme } from '@mantine/core';
 import { Board } from '../board';
 import { Level } from '../level';
 import { Score } from '../score';
-import { Settings } from '../settings';
 import './game.css';
 import { ActionIcon } from '@mantine/core';
 import { GameOver, GameOverBanner } from '../game-over';
 import { useGame } from '../../hooks/use-game';
 import type { ViewOptions } from '../../../game/types';
 import { useSaveSeedHistory } from '../../hooks/use-seed-history';
+import { useSettingsMenu } from '../../hooks/use-settings-menu';
+import { SettingsMenu } from '../settings-menu';
+import { SETTINGS_SECTIONS } from '../../context/settings-menu';
 
 export const Game = () => {
   useSaveSeedHistory();
-  const [settingsOpen, setSettingsOpen] = useState(false);
+  const { open } = useSettingsMenu();
   const { setColorScheme, colorScheme } = useMantineColorScheme();
   const { setViewOptions, game, restart } = useGame();
 
@@ -77,7 +78,7 @@ export const Game = () => {
           <ActionIcon
             color="text"
             variant="transparent"
-            onClick={() => setSettingsOpen(true)}
+            onClick={() => open(SETTINGS_SECTIONS.SETTINGS)}
             aria-label="Settings"
           >
             <MdOutlineSettings size={24} />
@@ -94,7 +95,7 @@ export const Game = () => {
           <Board />
         </section>
       </div>
-      <Settings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <SettingsMenu />
       <GameOver />
     </div>
   );

@@ -3,9 +3,8 @@ import { MdDelete, MdOutlineSearch } from 'react-icons/md';
 import { useSeedHistory } from '../../hooks/use-seed-history';
 import { useGame } from '../../hooks/use-game';
 import { usePushState } from '../../hooks/use-back-button';
-import { useEffect, useState, type RefObject } from 'react';
+import { useState } from 'react';
 import { SortButton } from '../common/sort-button';
-import { getScroll, saveScroll } from '../../../storage/misc';
 import { Loading } from '../common';
 
 const ITEM_SEARCH_MINIMUM = 7;
@@ -53,10 +52,9 @@ type SortProperty = 'date' | 'score';
 
 type HistoryProps = {
   onSelect: (seed: string) => void;
-  scrollableRef: RefObject<HTMLElement | null>;
 };
 
-export const History = ({ onSelect, scrollableRef }: HistoryProps) => {
+export const History = ({ onSelect }: HistoryProps) => {
   const { game } = useGame();
   const { seedHistory, deleteSeedInfo } = useSeedHistory();
   const [sortProperty, setSortProperty] = useState<SortProperty>('date');
@@ -64,21 +62,11 @@ export const History = ({ onSelect, scrollableRef }: HistoryProps) => {
   const [filter, setFilter] = useState('');
   usePushState();
 
-  useEffect(() => {
-    const savedScrollPos = getScroll();
-    if (scrollableRef.current) {
-      scrollableRef.current.scrollTop = savedScrollPos;
-    }
-  }, [scrollableRef]);
-
   if (!seedHistory) {
     return <Loading visible />;
   }
 
   const onSelectItem = (seed: string) => {
-    if (scrollableRef.current) {
-      saveScroll(scrollableRef.current.scrollTop);
-    }
     onSelect(seed);
   };
 
