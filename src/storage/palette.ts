@@ -110,3 +110,8 @@ export const deleteCustomPalette = (paletteName: string) => {
   localStorage.setItem(CUSTOM_PALETTES_KEY, JSON.stringify(newCustomPalettes));
   fireEvent();
 };
+
+export const deleteAllPalettes = () => {
+  localStorage.removeItem(CUSTOM_PALETTES_KEY);
+  fireEvent();
+};

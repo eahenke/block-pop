@@ -1,5 +1,11 @@
 import { Box, Group } from '@mantine/core';
-import { MdEdit, MdEqualizer, MdPalette, MdShuffle } from 'react-icons/md';
+import {
+  MdDeveloperMode,
+  MdEdit,
+  MdEqualizer,
+  MdPalette,
+  MdShuffle,
+} from 'react-icons/md';
 
 import { useGame } from '../../hooks/use-game';
 import { Menu } from '../common';
@@ -10,15 +16,23 @@ import {
   SETTINGS_SECTIONS,
   type SettingsSections,
 } from '../../context/settings-menu';
+import { useState } from 'react';
+import { useNClicks } from '../../hooks/use-n-clicks';
 
 export const Settings = () => {
   const { game } = useGame();
   const { open } = useSettingsMenu();
+  const [showDev, setShowDev] = useState(false);
+  const handleTripleClick = useNClicks(3);
   usePushState();
 
   const setSection = (val: SettingsSections) => {
     open(val);
   };
+
+  const onTripleClick = handleTripleClick(() => {
+    setShowDev(prev => !prev);
+  });
 
   const items = [
     {
@@ -43,6 +57,14 @@ export const Settings = () => {
     },
   ];
 
+  if (showDev) {
+    items.push({
+      title: 'Dev',
+      icon: <MdDeveloperMode size={24} />,
+      onClick: () => setSection(SETTINGS_SECTIONS.DEV),
+    });
+  }
+
   return (
     <>
       <Group justify="center">
@@ -50,6 +72,15 @@ export const Settings = () => {
       </Group>
       <Box mt="md">
         <Menu items={items} />
+        <Box
+          onClick={onTripleClick}
+          pos="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          h="xl"
+          w="full"
+        />
       </Box>
     </>
   );

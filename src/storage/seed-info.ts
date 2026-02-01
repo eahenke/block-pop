@@ -184,3 +184,14 @@ export const saveSeedInfo = async (seedInfo: SeedInfo): Promise<void> => {
     }
   });
 };
+
+export const deleteAllSeedInfo = async (): Promise<void> => {
+  try {
+    await db.transaction('rw', 'seedInfo', 'attempts', async () => {
+      await db.seedInfo.clear();
+      await db.attempts.clear();
+    });
+  } catch (e) {
+    console.error('Failed to clear game data', e);
+  }
+};

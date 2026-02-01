@@ -25,3 +25,12 @@ export const tryPeristStorage = async () => {
     return;
   }
 };
+
+export const getStorageEstimate = async (): Promise<StorageEstimate | null> => {
+  if (!navigator.storage || !navigator.storage.estimate) {
+    return null;
+  }
+  const estimate = await navigator.storage.estimate();
+
+  return estimate;
+};

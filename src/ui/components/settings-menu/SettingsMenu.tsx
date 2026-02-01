@@ -15,6 +15,8 @@ import type { PaletteType } from '../../../palette/types';
 import { Palette } from './Palette';
 import { PaletteEdit } from './PaletteEdit';
 import './settings.css';
+import { Dev } from './Dev';
+import { ManageStorage } from './ManageStorage';
 
 const getTitle = (section: SettingsSections): string => {
   const titles: Record<SettingsSections, string> = {
@@ -25,6 +27,8 @@ const getTitle = (section: SettingsSections): string => {
     stats: 'Statistics',
     palette: 'Palettes',
     paletteCustom: 'Custom Palette',
+    dev: 'Dev',
+    manageStorage: 'Manage Storage',
   };
 
   return titles[section];
@@ -112,6 +116,13 @@ export const SettingsMenu = () => {
       </SettingsMenuSection>
       <SettingsMenuSection id={SETTINGS_SECTIONS.PALETTE_CUSTOM}>
         <PaletteEdit palette={customPalette} onDone={stack.handleBack} />
+      </SettingsMenuSection>
+      {/* Dev Section */}
+      <SettingsMenuSection id={SETTINGS_SECTIONS.DEV}>
+        <Dev />
+      </SettingsMenuSection>
+      <SettingsMenuSection id={SETTINGS_SECTIONS.MANAGE_STORAGE}>
+        <ManageStorage />
       </SettingsMenuSection>
     </>
   );

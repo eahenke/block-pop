@@ -36,4 +36,8 @@ export default defineConfig({
     }),
   ],
   base: 'block-pop',
+  define: {
+    APP_VERSION: JSON.stringify(process.env.npm_package_version),
+    BUILD_DATE: JSON.stringify(new Date().toLocaleDateString('en-CA')),
+  },
 });

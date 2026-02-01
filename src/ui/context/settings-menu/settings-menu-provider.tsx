@@ -32,6 +32,7 @@ export const SettingsMenuProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [currentOpen]);
 
+  // TODO: Build a config based back-handler for nested routes
   const handleBack = useCallback(() => {
     if (!currentOpen) {
       return;
@@ -44,6 +45,9 @@ export const SettingsMenuProvider = ({ children }: { children: ReactNode }) => {
       stack.close(currentOpen);
     } else if (currentOpen === SETTINGS_SECTIONS.PALETTE_CUSTOM) {
       setCurrentOpen(SETTINGS_SECTIONS.PALETTE);
+      stack.close(currentOpen);
+    } else if (currentOpen === SETTINGS_SECTIONS.MANAGE_STORAGE) {
+      setCurrentOpen(SETTINGS_SECTIONS.DEV);
       stack.close(currentOpen);
     } else {
       stack.close(currentOpen);
