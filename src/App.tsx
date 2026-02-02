@@ -8,8 +8,11 @@ import { PaletteProvider } from './ui/context/palette/palette-provider';
 import { useDbMigration } from './ui/hooks/use-db-migration';
 import { Loading } from './ui/components/common';
 import { SettingsMenuProvider } from './ui/context/settings-menu';
+import { useLogsTtl } from './ui/hooks/use-logs-ttl';
+import { LOG_RETENTION_DAYS } from './config/environment';
 
 function App() {
+  useLogsTtl(LOG_RETENTION_DAYS);
   const { loading } = useDbMigration();
 
   return (

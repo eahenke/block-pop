@@ -1,5 +1,4 @@
 import { Dexie, type EntityTable, type Table } from 'dexie';
-import type { IMeta } from 'tslog';
 
 export type StoredAttempt = {
   seed: string;

@@ -13,7 +13,6 @@ import { getSeedInfo } from '../../storage';
 import { getDeepLinkSeed } from '../utils/url';
 import { Loading } from '../components/common';
 import { tryPeristStorage } from '../../storage/storage-manager';
-import { logger } from '../../util/logger';
 
 const defaultInitialSeed = '1234567890';
 
