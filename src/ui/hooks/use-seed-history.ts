@@ -4,6 +4,7 @@ import { deleteSeedInfo, getSeedHistory, saveSeedInfo } from '../../storage';
 import { notifications } from '@mantine/notifications';
 import { useDexieQuery } from './db';
 import { isQuotaExceededError } from '../../storage/utils';
+import { logger } from '../../util/logger';
 
 export const useSaveSeedHistory = () => {
   const { game } = useGame();
@@ -24,7 +25,7 @@ export const useSaveSeedHistory = () => {
             });
             return;
           }
-          console.error('Failed to save', e);
+          logger.error('Failed to save', e);
 
           // General fallback
           notifications.show({

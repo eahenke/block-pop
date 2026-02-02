@@ -1,5 +1,6 @@
 import type { PaletteType } from '../palette/types';
 import { isPresetPalette } from '../palette/utils';
+import { logger } from '../util/logger';
 
 export const CURRENT_PALETTE_KEY = 'currentPalette';
 
@@ -12,7 +13,7 @@ export const getCurrentPalette = (): PaletteType | null => {
   } catch (e) {
     // Backwards compat in case a string value is already stored
     if (e instanceof Error) {
-      console.error('Error getting palette:', e.message);
+      logger.error('Error getting palette:', e.message);
       return null;
     }
     throw e;
@@ -46,7 +47,7 @@ export const getCustomPalettes = (): CustomPalettes | null => {
 
     return customPalettes || null;
   } catch (e) {
-    console.error('Error getting CustomPalettes', e);
+    logger.error('Error getting CustomPalettes', e);
     return null;
   }
 };

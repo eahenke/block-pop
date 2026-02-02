@@ -5,6 +5,11 @@ import {
   type StoredHighScore,
   type StoredSeedInfo,
 } from '../db';
+import { logger } from '../../util/logger';
+
+const migrationLogger = logger.getSubLogger({
+  name: 'SeedInfoMigrationLogger',
+});
 
 export const needsSeedMigration = async () => {
   const count = await db.seedInfo.count();
@@ -72,11 +77,11 @@ export const migrateSeedInfo = async () => {
 
   try {
     if (running) {
-      console.log('Already running.');
+      migrationLogger.info('Already running.');
       return;
     }
     running = true;
-    console.log('Starting migration...');
+    migrationLogger.info('Starting migration...');
     const result = await db.transaction(
       'rw',
       'seedInfo',
@@ -87,11 +92,10 @@ export const migrateSeedInfo = async () => {
       }
     );
     running = false;
-    console.log('Migration successful', { result });
+    migrationLogger.info('Migration successful', { result });
   } catch (e) {
     running = false;
-    console.error('Failed to migrate');
-    console.error(e);
+    migrationLogger.error('Failed to migrate', e);
     throw e;
   }
 };

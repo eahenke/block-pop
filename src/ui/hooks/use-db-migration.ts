@@ -3,6 +3,7 @@ import {
   migrateSeedInfo,
   needsSeedMigration,
 } from '../../storage/migrate/migrate-seed-info';
+import { logger } from '../../util/logger';
 
 export const useDbMigration = () => {
   const runningRef = useRef<boolean>(false);
@@ -18,8 +19,7 @@ export const useDbMigration = () => {
           await migrateSeedInfo();
         }
       } catch (e) {
-        console.error('Failed to migrate seed');
-        console.error(e);
+        logger.error('Failed to migrate seed', e);
       } finally {
         setLoading(false);
       }

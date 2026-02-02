@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getStorageEstimate } from '../../storage';
+import { logger } from '../../util/logger';
 
 export const useStorageEstimate = () => {
   const [estimate, setEstimate] = useState<StorageEstimate | null>(null);
@@ -11,7 +12,7 @@ export const useStorageEstimate = () => {
       const data = await getStorageEstimate();
       setEstimate(data);
     } catch (e) {
-      console.log('Failed to get storage estimate', e);
+      logger.error('Failed to get storage estimate', e);
       setEstimate(null);
     } finally {
       setLoading(false);

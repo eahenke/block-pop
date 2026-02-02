@@ -1,4 +1,5 @@
 import type { ViewOptions } from '../game/types';
+import { logger } from '../util/logger';
 
 const CURRENT_SEED_KEY = 'currentSeed';
 const VIEW_OPTIONS_KEY = 'blockPopViewOptions';
@@ -7,7 +8,7 @@ export const getCurrentSeed = (): string | null => {
   try {
     return localStorage.getItem(CURRENT_SEED_KEY) || null;
   } catch (e) {
-    console.error('Error getting CurrentSeed', e);
+    logger.error('Error getting CurrentSeed', e);
     return null;
   }
 };
@@ -25,7 +26,7 @@ export const getViewOptions = (): ViewOptions | null => {
 
     return viewOptions;
   } catch (e) {
-    console.error('Error getting ViewOptions', e);
+    logger.error('Error getting ViewOptions', e);
     return null;
   }
 };

@@ -1,3 +1,5 @@
+import { logger } from '../util/logger';
+
 const persist = async () => {
   return (
     navigator.storage &&
@@ -21,7 +23,7 @@ export const tryPeristStorage = async () => {
       await persist();
     }
   } catch (e) {
-    console.error('Unable to persist storage', e);
+    logger.error('Unable to persist storage', e);
     return;
   }
 };

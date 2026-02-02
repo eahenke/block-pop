@@ -5,6 +5,7 @@ import type {
   SeedInfo,
   SeedSummary,
 } from '../game/types';
+import { logger } from '../util/logger';
 import { db, type StoredAttempt, type StoredSeedInfo } from './db';
 
 export const SEED_INFO_KEY = 'seedInfo';
@@ -59,7 +60,7 @@ export const getSeedHistoryLegacy = (): LegacySeedHistory | null => {
 
     return seedHistory || null;
   } catch (e) {
-    console.error('Error getting SeedHistory', e);
+    logger.error('Error getting legacy SeedHistory', e);
     return null;
   }
 };
@@ -161,7 +162,7 @@ export const getSeedInfo = async (seed: string): Promise<SeedInfo | null> => {
     );
     return results;
   } catch (e) {
-    console.error('Error getting SeedInfo', e);
+    logger.error('Error getting SeedInfo', e);
     return null;
   }
 };
@@ -192,6 +193,6 @@ export const deleteAllSeedInfo = async (): Promise<void> => {
       await db.attempts.clear();
     });
   } catch (e) {
-    console.error('Failed to clear game data', e);
+    logger.error('Failed to clear game data', e);
   }
 };

@@ -3,6 +3,7 @@ import { useLongPress } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { MdContentCopy } from 'react-icons/md';
 import { createDeepLinkSeed } from '../../utils/url';
+import { logger } from '../../../util/logger';
 
 type SeedProps = {
   seed: string;
@@ -22,7 +23,7 @@ export const Seed = ({ seed, title = 'Current seed:' }: SeedProps) => {
         message: 'Copied deep link to clipboard',
       });
     } catch (e) {
-      console.error('Failed to copy to clipboard', e);
+      logger.error('Failed to copy to clipboard', e);
       notifications.show({
         message: 'Failed to copy',
       });
@@ -36,7 +37,7 @@ export const Seed = ({ seed, title = 'Current seed:' }: SeedProps) => {
         message: 'Copied to clipboard',
       });
     } catch (e) {
-      console.error('Failed to copy to clipboard', e);
+      logger.error('Failed to copy to clipboard', e);
       notifications.show({
         message: 'Failed to copy',
       });

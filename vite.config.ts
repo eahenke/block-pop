@@ -39,5 +39,6 @@ export default defineConfig({
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
     BUILD_DATE: JSON.stringify(new Date().toLocaleDateString('en-CA')),
+    NODE_ENV: JSON.stringify(process.env.NODE_ENV),
   },
 });
