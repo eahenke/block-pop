@@ -10,6 +10,7 @@ export const SETTINGS_SECTIONS = {
   PALETTE_CUSTOM: 'paletteCustom',
   DEV: 'dev',
   MANAGE_STORAGE: 'manageStorage',
+  LOGS: 'logs',
 } as const;
 
 export type SettingsSections = ValueOf<typeof SETTINGS_SECTIONS>;

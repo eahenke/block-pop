@@ -46,7 +46,10 @@ export const SettingsMenuProvider = ({ children }: { children: ReactNode }) => {
     } else if (currentOpen === SETTINGS_SECTIONS.PALETTE_CUSTOM) {
       setCurrentOpen(SETTINGS_SECTIONS.PALETTE);
       stack.close(currentOpen);
-    } else if (currentOpen === SETTINGS_SECTIONS.MANAGE_STORAGE) {
+    } else if (
+      currentOpen === SETTINGS_SECTIONS.MANAGE_STORAGE ||
+      currentOpen === SETTINGS_SECTIONS.LOGS
+    ) {
       setCurrentOpen(SETTINGS_SECTIONS.DEV);
       stack.close(currentOpen);
     } else {

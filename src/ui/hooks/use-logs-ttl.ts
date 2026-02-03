@@ -8,5 +8,5 @@ const daysAgo = (days: number): Date => {
 export const useLogsTtl = (days: number) => {
   useEffect(() => {
     clearLogsBefore(daysAgo(days));
-  }, []);
+  }, [days]);
 };

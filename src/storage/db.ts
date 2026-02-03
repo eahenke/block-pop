@@ -24,6 +24,7 @@ export type StoredLog = {
   date: Date;
   browser: string;
   args: unknown[];
+  name: string;
 };
 
 export const db = new Dexie('BlockPopDB') as Dexie & {

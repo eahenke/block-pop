@@ -5,6 +5,7 @@ import { DEV } from '../config/environment';
 export const logger = new Logger({
   hideLogPositionForProduction: !DEV,
   argumentsArrayName: 'args',
+  name: 'logger',
 });
 
 // Browser is untyped on IMeta for some reason, but is present
@@ -27,6 +28,7 @@ const toStoredLog = (rawLog: ILogObj): StoredLog => {
     level,
     args: rawLog.args as unknown[],
     browser: meta?.browser || window.navigator.userAgent,
+    name: meta?.name || 'logger',
   };
 };
 

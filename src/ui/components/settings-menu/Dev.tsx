@@ -2,10 +2,15 @@ import { type ReactNode } from 'react';
 import { Box, Divider, Group, Text } from '@mantine/core';
 
 import { usePushState } from '../../hooks/use-back-button';
-import { MdOutlineStorage } from 'react-icons/md';
+import { MdOutlineListAlt, MdOutlineStorage } from 'react-icons/md';
 import { Menu } from '../common';
 import { useSettingsMenu } from '../../hooks/use-settings-menu';
 import { SETTINGS_SECTIONS } from '../../context/settings-menu';
+import {
+  APP_VERSION,
+  BUILD_DATE,
+  BUILD_TAG,
+} from '../../../config/environment';
 
 type ItemProps = {
   title: ReactNode;
@@ -21,7 +26,6 @@ const Item = ({ title, value }: ItemProps) => {
   );
 };
 
-// TODO: BUILD_TAG
 // TODO: Underlying Browser
 // TODO: Logs > screen w/ download/export
 export const Dev = () => {
@@ -32,6 +36,7 @@ export const Dev = () => {
     <Box mt="md">
       <Item title="Version:" value={APP_VERSION} />
       <Item title="Build Date:" value={BUILD_DATE} />
+      <Item title="Build Tag:" value={BUILD_TAG} />
       <Divider my="xl" />
       <Menu
         items={[
@@ -39,6 +44,11 @@ export const Dev = () => {
             title: 'Manage Storage',
             icon: <MdOutlineStorage size={24} />,
             onClick: () => open(SETTINGS_SECTIONS.MANAGE_STORAGE),
+          },
+          {
+            title: 'Manage Logs',
+            icon: <MdOutlineListAlt size={24} />,
+            onClick: () => open(SETTINGS_SECTIONS.LOGS),
           },
         ]}
       />

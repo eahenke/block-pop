@@ -1,7 +1,10 @@
+import { execSync } from 'node:child_process';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 // import { analyzer } from 'vite-bundle-analyzer';
+
+const commitHash = execSync('git rev-parse --short HEAD').toString().trim();
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -37,8 +40,9 @@ export default defineConfig({
   ],
   base: 'block-pop',
   define: {
-    APP_VERSION: JSON.stringify(process.env.npm_package_version),
-    BUILD_DATE: JSON.stringify(new Date().toLocaleDateString('en-CA')),
+    PUBLIC_APP_VERSION: JSON.stringify(process.env.npm_package_version),
+    PUBLIC_BUILD_DATE: JSON.stringify(new Date().toLocaleDateString('en-CA')),
+    PUBLIC_BUILD_TAG: JSON.stringify(commitHash),
     NODE_ENV: JSON.stringify(process.env.NODE_ENV),
   },
 });

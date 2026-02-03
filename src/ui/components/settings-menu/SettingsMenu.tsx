@@ -17,6 +17,7 @@ import { PaletteEdit } from './PaletteEdit';
 import './settings.css';
 import { Dev } from './Dev';
 import { ManageStorage } from './ManageStorage';
+import { ManageLogs } from './ManageLogs';
 
 const getTitle = (section: SettingsSections): string => {
   const titles: Record<SettingsSections, string> = {
@@ -29,6 +30,7 @@ const getTitle = (section: SettingsSections): string => {
     paletteCustom: 'Custom Palette',
     dev: 'Dev',
     manageStorage: 'Manage Storage',
+    logs: 'Manage Logs',
   };
 
   return titles[section];
@@ -123,6 +125,9 @@ export const SettingsMenu = () => {
       </SettingsMenuSection>
       <SettingsMenuSection id={SETTINGS_SECTIONS.MANAGE_STORAGE}>
         <ManageStorage />
+      </SettingsMenuSection>
+      <SettingsMenuSection id={SETTINGS_SECTIONS.LOGS}>
+        <ManageLogs />
       </SettingsMenuSection>
     </>
   );
