@@ -1,17 +1,9 @@
-import {
-  Box,
-  Button,
-  Collapse,
-  Group,
-  Loader,
-  Text,
-  TextInput,
-} from '@mantine/core';
+import { Box, Group, Loader, Text } from '@mantine/core';
 import { useStorageEstimate } from '../../hooks/use-storage-estimate';
 import { usePushState } from '../../hooks/use-back-button';
-import { useState, type ReactNode } from 'react';
-import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
+import { type ReactNode } from 'react';
 import { useManageStorage } from '../../hooks/use-manage-storage';
+import { DeleteConfirm } from '../common';
 
 const units = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 const formatBytes = (bytes?: number | null) => {
@@ -41,69 +33,6 @@ const Item = ({ title, value }: ItemProps) => {
   );
 };
 
-type DeleteWithConfirmProps = {
-  deleteKey: string;
-  onDelete: () => void;
-  text: ReactNode;
-};
-
-export const DeleteWithConfirm = ({
-  deleteKey,
-  onDelete,
-  text,
-}: DeleteWithConfirmProps) => {
-  const [opened, setOpened] = useState(false);
-  const [confirmText, setConfirmText] = useState('');
-  const toggle = () => {
-    setOpened(prev => !prev);
-  };
-
-  return (
-    <section>
-      <Button
-        variant="text"
-        onClick={toggle}
-        rightSection={
-          opened ? <MdArrowDropUp size={24} /> : <MdArrowDropDown size={24} />
-        }
-        fullWidth={true}
-        size="lg"
-        mb="md"
-      >
-        {typeof text === 'string' ? <Text size="lg">{text}</Text> : text}
-      </Button>
-      <Collapse in={opened}>
-        <Text size="sm">
-          Type{' '}
-          <Text component="span" c="red">
-            "{deleteKey}"
-          </Text>{' '}
-          to delete. This cannot be undone.
-        </Text>
-        <Box my="sm">
-          <TextInput
-            value={confirmText}
-            onChange={e => setConfirmText(e.currentTarget.value)}
-            label=""
-          />
-        </Box>
-        <Button
-          fullWidth={true}
-          onClick={() => {
-            if (confirmText !== deleteKey) {
-              return;
-            }
-            onDelete();
-          }}
-          disabled={confirmText !== deleteKey}
-        >
-          Delete
-        </Button>
-      </Collapse>
-    </section>
-  );
-};
-
 export const ManageStorage = () => {
   const { estimate, loading, refetch } = useStorageEstimate();
   const { deleteGameData } = useManageStorage();
@@ -121,7 +50,7 @@ export const ManageStorage = () => {
         title="Storage Quota:"
         value={loading ? <Loader /> : formatBytes(byteQuota)}
       />
-      <DeleteWithConfirm
+      <DeleteConfirm
         text={
           <Box>
             <Text size="lg">Delete Game Data</Text>

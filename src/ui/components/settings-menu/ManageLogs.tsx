@@ -1,11 +1,11 @@
 import { type ReactNode } from 'react';
-import { Box, Divider, Group, Text } from '@mantine/core';
+import { Box, Button, Divider, Group, Text } from '@mantine/core';
 
 import { usePushState } from '../../hooks/use-back-button';
 import { MdOutlineDownload } from 'react-icons/md';
-import { Menu } from '../common';
+import { DeleteConfirm } from '../common';
 import { LOG_RETENTION_DAYS } from '../../../config/environment';
-import { getLogs } from '../../../storage/logs';
+import { clearLogsBefore, getLogs } from '../../../storage/logs';
 
 type ItemProps = {
   title: ReactNode;
@@ -42,16 +42,41 @@ export const ManageLogs = () => {
   return (
     <Box mt="md">
       <Item title="Log Retention:" value={`${LOG_RETENTION_DAYS} Days`} />
-      <Divider my="xl" />
-
-      <Menu
-        items={[
-          {
-            title: 'Export Logs',
-            icon: <MdOutlineDownload size={24} />,
-            onClick: downloadLogs,
+      <Divider my="lg" />
+      <Button
+        variant="text"
+        size="xl"
+        justify="space-between"
+        fullWidth
+        onClick={downloadLogs}
+        rightSection={<MdOutlineDownload size={24} />}
+        styles={{
+          inner: {
+            flex: 1,
           },
-        ]}
+        }}
+      >
+        <Box>
+          <Text size="lg">Export Logs</Text>
+          <Text size="sm" component="span">
+            Download logs file in JSON format.
+          </Text>
+        </Box>
+      </Button>
+      <Divider my="lg" />
+      <DeleteConfirm
+        text={
+          <Box>
+            <Text size="lg">Delete Logs</Text>
+            <Text size="sm" component="span">
+              Clear logs to free up space.
+            </Text>
+          </Box>
+        }
+        onDelete={async () => {
+          await clearLogsBefore(new Date());
+        }}
+        deleteKey="Delete Logs"
       />
     </Box>
   );
