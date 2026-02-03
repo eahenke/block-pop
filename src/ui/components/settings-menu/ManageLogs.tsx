@@ -2,10 +2,8 @@ import { type ReactNode } from 'react';
 import { Box, Divider, Group, Text } from '@mantine/core';
 
 import { usePushState } from '../../hooks/use-back-button';
-import { MdOutlineDownload, MdOutlineStorage } from 'react-icons/md';
+import { MdOutlineDownload } from 'react-icons/md';
 import { Menu } from '../common';
-import { useSettingsMenu } from '../../hooks/use-settings-menu';
-import { SETTINGS_SECTIONS } from '../../context/settings-menu';
 import { LOG_RETENTION_DAYS } from '../../../config/environment';
 import { getLogs } from '../../../storage/logs';
 
