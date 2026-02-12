@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { Box, Divider, Group, Text } from '@mantine/core';
+import { Box, Divider, Group, Text, type TextProps } from '@mantine/core';
 
 import { usePushState } from '../../hooks/use-back-button';
 import { MdOutlineListAlt, MdOutlineStorage } from 'react-icons/md';
@@ -15,28 +15,36 @@ import {
 type ItemProps = {
   title: ReactNode;
   value: ReactNode;
+  valueSize?: TextProps['size'];
+  titleSize?: TextProps['size'];
 };
 
-const Item = ({ title, value }: ItemProps) => {
+const Item = ({
+  title,
+  titleSize = 'lg',
+  value,
+  valueSize = 'lg',
+}: ItemProps) => {
   return (
     <Group justify="space-between" mb="md">
-      <Text size="lg">{title}</Text>
-      <Text size="lg">{value}</Text>
+      <Text size={titleSize}>{title}</Text>
+      <Text size={valueSize}>{value}</Text>
     </Group>
   );
 };
 
-// TODO: Underlying Browser
-// TODO: Logs > screen w/ download/export
 export const Dev = () => {
   const { open } = useSettingsMenu();
   usePushState();
+
+  const userAgent = window.navigator.userAgent;
 
   return (
     <Box mt="md">
       <Item title="Version:" value={APP_VERSION} />
       <Item title="Build Date:" value={BUILD_DATE} />
       <Item title="Build Tag:" value={BUILD_TAG} />
+      <Item title="User Agent" value={userAgent} valueSize="xs"></Item>
       <Divider my="xl" />
       <Menu
         items={[
