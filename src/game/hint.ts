@@ -19,6 +19,10 @@ export const getNextMove = (game: GameType) => {
   }
 
   const hsMoves = highScore.moves || [];
+  if (hsMoves.length === 0) {
+    return null;
+  }
+
   const currentMoves = game.level?.moves || [];
   if (currentMoves.length === 0) {
     return hsMoves[0] || null;
