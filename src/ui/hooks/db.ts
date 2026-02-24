@@ -1,4 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
+import { logger } from '../../util/logger';
 
 export type QueryResult<T> = {
   data: T | null;
@@ -13,6 +14,7 @@ export const useDexieQuery = <T>(query: () => Promise<T>): QueryResult<T> => {
 
       return { data: result, error: null };
     } catch (e) {
+      logger.error('Dexie query error', e);
       return {
         data: null,
         error: e instanceof Error ? e : new Error(JSON.stringify(e)),

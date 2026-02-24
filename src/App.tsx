@@ -10,6 +10,7 @@ import { Loading } from './ui/components/common';
 import { SettingsMenuProvider } from './ui/context/settings-menu';
 import { useLogsTtl } from './ui/hooks/use-logs-ttl';
 import { LOG_RETENTION_DAYS } from './config/environment';
+import { ErrorBoundary } from './ui/components/error-boundary';
 
 function App() {
   useLogsTtl(LOG_RETENTION_DAYS);
@@ -17,18 +18,20 @@ function App() {
 
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
-      <Notifications />
-      <GameProvider>
-        <PaletteProvider>
-          <SettingsMenuProvider>
-            {loading ? (
-              <Loading visible message="Migrating data..." />
-            ) : (
-              <Game />
-            )}
-          </SettingsMenuProvider>
-        </PaletteProvider>
-      </GameProvider>
+      <ErrorBoundary>
+        <Notifications />
+        <GameProvider>
+          <PaletteProvider>
+            <SettingsMenuProvider>
+              {loading ? (
+                <Loading visible message="Migrating data..." />
+              ) : (
+                <Game />
+              )}
+            </SettingsMenuProvider>
+          </PaletteProvider>
+        </GameProvider>
+      </ErrorBoundary>
     </MantineProvider>
   );
 }
